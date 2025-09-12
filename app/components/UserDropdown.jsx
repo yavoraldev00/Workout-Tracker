@@ -9,15 +9,15 @@ export default function UserDropdown() {
     <>
     <button
         onClick={() => setOpen(!open)}
-        className=""
+        className="bg-gray-500 cursor-pointer p-4"
     >
         Username
     </button>
 
     {/* Dropdown with logout button */}
     {open && (
-        <div className="absolute right-0 mt-2 w-32 bg-black rounded shadow-lg">
-        <button className="block w-full text-left px-4 py-2 hover:bg-gray-300 transition-all duration-500">
+        <div className="absolute right-0 mt-2 w-full bg-black rounded shadow-lg">
+        <button className="w-full text-center py-2 cursor-pointer">
             Logout
         </button>
         </div>
