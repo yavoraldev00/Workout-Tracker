@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Exercises from "./Exercises";
+import ExerciseSpecifics from "@/app/components/ExerciseSpecifics";
 
 export default function CreateWorkout() {
   const [workoutName, setWorkoutName] = useState("")
@@ -17,6 +18,7 @@ export default function CreateWorkout() {
   async function submitForm(e) {
     e.preventDefault();
 
+    debugger;
     console.log(workoutName)
   }
 
@@ -36,9 +38,7 @@ export default function CreateWorkout() {
       <h2 className="sub-title">Exercises</h2>
 
       { selectedExercises.length == 0 ? (<p>Select some exercises</p>) : selectedExercises.map((exr) => (
-        <div id={exr}>
-          <h3>{exr}</h3>
-        </div>
+        <ExerciseSpecifics key={exr} exercise = {exr} setSelectedExercises = {setSelectedExercises} />
       )) }
 
       <Exercises onExerciseSelect = {addExerciseToWorkout} searchFilter = {selectedExercises} />

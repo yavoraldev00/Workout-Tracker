@@ -10,29 +10,26 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets }) {
   return (
     <div>
         {
-            Array.from({ length: numberOfSets }, (_, i) => i + 1)
-            .map((set_number) => (
-                <>
-                    {
-                        (set_number == 1) ? 
-                        <div></div>
-                        :
-                        <button onClick={(e)=>{e.preventDefault; setNumberOfSets(numberOfSets - 1)}} className="mx-auto"><IoRemove /></button>
-                   
-                   }
+          Array.from({ length: numberOfSets }, (_, i) => i + 1)
+          .map((set_number) => (
+              <>
+                  {
+                      (set_number == 1) ? 
+                      <div></div>
+                      :
+                      <button onClick={(e)=>{e.preventDefault(); setNumberOfSets(numberOfSets - 1)}} className="mx-auto"><IoRemove /></button>
+                  
+                  }
 
+                  <input type="number" name="reps" className="bg-amber-200"/>
+                  <input type="number" name="weight" className="bg-amber-200"/>
+              </>
+          ))
 
-                    <input type="number" name="reps" className="bg-amber-200"/>
-                    <input type="number" name="weight" className="bg-amber-200"/>
-                </>
-            ))
+          
+      }
 
-            
-        }
-
-        {numberOfSets < 6 && (
-        <button onClick={(e)=>{e.preventDefault; setNumberOfSets(numberOfSets + 1)}} className="mx-auto"><IoAdd /></button>
-      )}
+      {numberOfSets < 5 && (<button onClick={(e)=>{e.preventDefault(); setNumberOfSets(numberOfSets + 1)}} className="mx-auto"><IoAdd /></button>)}
     </div>
   )
 }

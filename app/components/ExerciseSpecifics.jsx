@@ -3,14 +3,19 @@
 import Image from "next/image";
 import { useState } from "react";
 import ExerciseInputData from "./ExerciseInputData";
+import { IoClose } from "react-icons/io5";
 
-export default function ExerciseSpecifics() {
-  const [sets, setSets] = useState(3)
+export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
+  const [sets, setSets] = useState(1)
   const [setLoad, setSetLoad] = useState([[]])
 
     return (
-    <div className="flex">
-        <Image src="/exercise_img/2Qh2J1e.gif" alt="shhh" width={128} height={128}/>
+    <div className="flex relative" key={exercise}>
+        <button onClick={(e)=>{e.preventDefault(); setSelectedExercises(prev => prev.filter(ex => ex !== exercise)) }} className="absolute top-0 right-0 p-4 cursor-pointer">
+          < IoClose size={24} color="white" className="bg-red-600"/>
+        </button>
+
+        <Image src={`/exercise_img/${exercise}.gif`} alt="shhh" width={128} height={128}/>
         <div>
             <h3>exercise name</h3>
 
