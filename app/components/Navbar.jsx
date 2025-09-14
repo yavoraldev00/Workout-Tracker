@@ -8,7 +8,7 @@ export default function Navbar() {
     <div className="flex bg-green-600 p-8">
         <div className='flex gap-6'>
             <Link href={"/"} className='bg-gray-500 p-4'>Home</Link>
-            <Link href={"/"} className='bg-gray-500 p-4'>Workouts</Link>
+            <Link href={"/exercises"} className='bg-gray-500 p-4'>Exercises</Link>
         </div>
         
         <div className="ml-auto bg-blue-400 relative">
