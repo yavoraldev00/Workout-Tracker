@@ -36,6 +36,14 @@ export default function CreateWorkout() {
       if (data_type === "reps") loads[set_number][0] = value;
       if (data_type === "weight") loads[set_number][1] = value;
 
+      // handle removing an entire set vs. updating reps/weight
+      if(data_type === "remove_set"){
+        loads.splice(set_number, 1);
+      }else {
+        if (data_type === "reps")  loads[set_number][0] = value;
+        if (data_type === "weight") loads[set_number][1] = value;
+      }
+
       // recalculate volume: sum of reps * weight for sets where both > 0
       const volume = loads.reduce((sum, set) => {
         const reps = Number(set[0]) || 0;

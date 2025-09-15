@@ -16,9 +16,7 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets, test,
           .map((set_number, index) => (
               <>
                   {
-                      (set_number == 1) ? 
-                      <div></div>
-                      :
+                      (index === numberOfSets - 1 && numberOfSets > 1) ? 
                       <button
                         onClick={(e) => {
                           e.preventDefault();
@@ -30,6 +28,8 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets, test,
                       >
                         <IoRemove />
                       </button>
+                      :
+                      <div></div>
                   
                   }
 
