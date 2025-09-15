@@ -5,7 +5,7 @@ import { useState } from "react";
 import ExerciseInputData from "./ExerciseInputData";
 import { IoClose } from "react-icons/io5";
 
-export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
+export default function ExerciseSpecifics({ exercise, setSelectedExercises, test }) {
   const [sets, setSets] = useState(1)
   const [setLoad, setSetLoad] = useState([[]])
 
@@ -25,7 +25,7 @@ export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
                 
                 {/* This is gonna be the component */}
 
-                <ExerciseInputData numberOfSets={sets} setNumberOfSets={setSets}/>
+                <ExerciseInputData numberOfSets={sets} setNumberOfSets={setSets} test = {test} exercise = { exercise }/>
             </div>
                 {/* Shows button if less than 5 sets */}
                 {/* Shows if the add button has been clicked, so add button doesn't appear with these */}

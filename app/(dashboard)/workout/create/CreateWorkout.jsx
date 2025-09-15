@@ -9,6 +9,10 @@ export default function CreateWorkout() {
   const [selectedExercises, setSelectedExercises] = useState([])
   const [exerciseLoad, setExerciseLoad] = useState({})
 
+  const test = (exercise_id, set_number, data_type, data_value) => {
+    debugger;
+  }
+
   function addExerciseToWorkout(exerciseToAdd) {
     if (!selectedExercises.find(ex => ex === exerciseToAdd.exerciseId)) {
        setSelectedExercises(currentExercises => [...currentExercises, exerciseToAdd.exerciseId]);
@@ -38,7 +42,7 @@ export default function CreateWorkout() {
       <h2 className="sub-title">Exercises</h2>
 
       { selectedExercises.length == 0 ? (<p>Select some exercises</p>) : selectedExercises.map((exr) => (
-        <ExerciseSpecifics key={exr} exercise = {exr} setSelectedExercises = {setSelectedExercises} />
+        <ExerciseSpecifics key={exr} exercise = {exr} setSelectedExercises = {setSelectedExercises} test = {test}/>
       )) }
 
       <Exercises onExerciseSelect = {addExerciseToWorkout} searchFilter = {selectedExercises} />
