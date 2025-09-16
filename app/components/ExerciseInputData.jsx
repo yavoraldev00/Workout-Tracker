@@ -5,16 +5,16 @@ import { IoAdd, IoRemove } from "react-icons/io5";
 import { CreateWorkoutContext } from "../(dashboard)/workout/create/CreateWorkout";
 
 
-export default function ExerciseInputData({ numberOfSets, setNumberOfSets, test, exercise }) {
-  const { selectedExercises } = useContext(CreateWorkoutContext);
+export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exercise }) {
+  const { adjustExerciseData } = useContext(CreateWorkoutContext);
 
+  // Creates a row for each Set. Component gets rebuilt when the number of sets change
   useEffect(()=>{},[numberOfSets])
-  return (
-    <div>
+  return (<>
         {
           Array.from({ length: numberOfSets }, (_, i) => i + 1)
           .map((set_number, index) => (
-              <>
+              <div key={set_number}>
                   {
                       (index === numberOfSets - 1 && numberOfSets > 1) ? 
                       <button
@@ -22,7 +22,7 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets, test,
                           e.preventDefault();
                           setNumberOfSets(numberOfSets - 1);
                           // tell parent to remove the set data for this exercise (remove last set)
-                          test(exercise, index, "remove_set");
+                          adjustExerciseData(exercise, index, "remove_set");
                         }}
                         className="mx-auto"
                       >
@@ -34,28 +34,28 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets, test,
                   }
 
                   <input
+                    required
                     type="number"
-                    onChange={(e) => {test(exercise, index, e.target.name, e.target.value)}}
+                    onChange={(e) => {adjustExerciseData(exercise, index, e.target.name, e.target.value)}}
                     name="reps"
                     key={`set_${set_number}_reps`}
                     className="bg-amber-200"
                     placeholder="reps"
                   />
                   <input
+                    required
                     type="number"
                     name="weight"
-                    onChange={(e) => {test(exercise, index, e.target.name, e.target.value)}}
+                    onChange={(e) => {adjustExerciseData(exercise, index, e.target.name, e.target.value)}}
                     key={`set_${set_number}_weight`}
                     className="bg-amber-200"
                     placeholder="weight"
                   />
-              </>
+              </div>
           ))
 
           
       }
-
-      {numberOfSets < 5 && (<button onClick={(e)=>{e.preventDefault(); setNumberOfSets(numberOfSets + 1)}} className="mx-auto"><IoAdd /></button>)}
-    </div>
+      </>
   )
 }

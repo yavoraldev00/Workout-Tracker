@@ -4,6 +4,7 @@ import { createContext, useState } from "react";
 import Exercises from "./Exercises";
 import ExerciseSpecifics from "@/app/components/ExerciseSpecifics";
 
+// Context for passing variables and functions from createContext to ExerciseInputData
 export const CreateWorkoutContext = createContext();
 
 export default function CreateWorkout() {
@@ -18,7 +19,7 @@ export default function CreateWorkout() {
   //   }
   // }
 
-  const test = (exercise_id, set_number, data_type, data_value) => {
+  const adjustExerciseData = (exercise_id, set_number, data_type, data_value) => {
     const value = Number(data_value) || 0;
 
     setSelectedExercises((current) => {
@@ -84,7 +85,7 @@ export default function CreateWorkout() {
   }
 
   return (
-    <CreateWorkoutContext.Provider value={{ selectedExercises }}>
+    <CreateWorkoutContext.Provider value={{ selectedExercises, adjustExerciseData }}>
       <form onSubmit={submitForm} className="m-2 relative">
         <label>
           <span className="mr-4">Workout name:</span>
@@ -99,7 +100,7 @@ export default function CreateWorkout() {
         <h2 className="sub-title">Exercises</h2>
 
         { Object.keys(selectedExercises).length === 0 ? (<p>Select some exercises</p>) : Object.keys(selectedExercises).map((exerciseId) => (
-          <ExerciseSpecifics key={exerciseId} exercise = {exerciseId} setSelectedExercises = {setSelectedExercises} test = {test}/>
+          <ExerciseSpecifics key={exerciseId} exercise = {exerciseId} setSelectedExercises = {setSelectedExercises}/>
         )) }
 
         <Exercises onExerciseSelect = {addExerciseToWorkout} searchFilter = {Object.keys(selectedExercises)} />
