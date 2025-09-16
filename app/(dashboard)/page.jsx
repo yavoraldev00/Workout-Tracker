@@ -1,6 +1,5 @@
 import Workouts from "./Workouts";
 
-
 export default function Home() {
   return (
     <>

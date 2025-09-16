@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js"
 import Link from "next/link";
 import CreateNewWorkout from "../components/CreateNewWorkout";
 
-// Database call to retrieve workouts
+// Database call to retrieve ALL workouts
 async function getWorkouts() {
     
     const supabase = createClient(

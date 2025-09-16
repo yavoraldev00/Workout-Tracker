@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CreateWorkoutContext } from "../(dashboard)/workout/create/CreateWorkout";
 import ExerciseInputData from "./ExerciseInputData";
 import { IoAdd, IoClose } from "react-icons/io5";
@@ -9,6 +9,20 @@ import { IoAdd, IoClose } from "react-icons/io5";
 export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
   // Number of sets for an exercise. Minimum 1, maximum 5
   const [sets, setSets] = useState(1)
+
+  const { selectedExercises, importedExercises } = useContext(CreateWorkoutContext);
+  const [importedLoad, setImportedLoad] = useState({});
+
+  // If there are imported exercises, sets the number of sets to match it
+  useEffect(() => {
+    if(Object.keys(importedExercises).length > 0){
+      setSets(importedExercises[exercise].load.length);
+
+      const loadToImport = structuredClone(importedExercises[exercise].load);
+      setImportedLoad(loadToImport);
+    }
+    // Only runs it on the initial build
+  }, []);
 
     return (
     <div className="flex relative" key={exercise}>
@@ -43,6 +57,7 @@ export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
                   numberOfSets={sets}
                   setNumberOfSets={setSets}
                   exercise={exercise}
+                  importedLoad={importedLoad}
                 />
 
                 {/* Add button to add another set. Doesn't show if there's 5 sets (maximum) */}

@@ -1,24 +1,53 @@
 "use client"
 
-import { createContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import Exercises from "./Exercises";
 import ExerciseSpecifics from "@/app/components/ExerciseSpecifics";
 
 // Context for passing variables and functions from createContext to ExerciseInputData
 export const CreateWorkoutContext = createContext();
 
-export default function CreateWorkout() {
+export default function CreateWorkout({ selectedWorkoutTemplate }) {
+  // Variable that stores the imported workout, if there is one
+  const [importedExercises, setImportedExercises] = useState({})
+  
+  // Variable holding the name of the workout
   const [workoutName, setWorkoutName] = useState("")
+
+  // Variable holding the exercise object. Includes name and exercise details
   const [selectedExercises, setSelectedExercises] = useState({})
+
+  // If data is NOT passed to CreateWorkout, starts in creation mode
+  const [creationMode, setCreationMode] = useState(true)
+
+  useEffect(() => {
+    if (selectedWorkoutTemplate) {
+      // 1. Update the workout name
+      setWorkoutName(selectedWorkoutTemplate.workout.name);
+
+      // 2. Deep-clone the exercises object
+      //    - structuredClone is native in modern browsers/node
+      //    - fallback: JSON.parse(JSON.stringify(...))
+      const exercisesClone = structuredClone(selectedWorkoutTemplate.workout.exercises);
+
+      setSelectedExercises(exercisesClone);
+      setImportedExercises(exercisesClone);
+    }
+  }, []);
 
   // Object structure
   // {
-  //   "exercise_id": {
-  //     "load": [[]], // [[5,10], [10,25]] An array containing all sets. Each sets is composed of an array with [[0] - number of reps [1] - number of sets]
-  //     "volume": 0 // The total volume of the exercise. Sum of the multipe of the reps * sets. Example [5*10] + [10*25] The value of volume is 50 + 250 = 300
+  //   "name": "Workout Name",
+  //   "exercises":{
+  //      "exercise_id": {
+  //        "load": [[]], // [[5,10], [10,25]] An array containing all sets. Each sets is composed of an array with [[0] - number of reps [1] - number of sets]
+  //        "volume": 0 // The total volume of the exercise. Sum of the multipe of the reps * sets. Example [5*10] + [10*25] The value of volume is 50 + 250 = 300
+  //          },
+  //      "exercise_id": {....}
   //   }
   // }
 
+  // Function that sets the entered data into the
   const adjustExerciseData = (exercise_id, set_number, data_type, data_value) => {
     const value = Number(data_value) || 0;
 
@@ -80,12 +109,11 @@ export default function CreateWorkout() {
   async function submitForm(e) {
     e.preventDefault();
 
-    debugger;
     console.log(workoutName)
   }
 
   return (
-    <CreateWorkoutContext.Provider value={{ selectedExercises, adjustExerciseData }}>
+    <CreateWorkoutContext.Provider value={{ selectedExercises, adjustExerciseData, importedExercises }}>
       <form onSubmit={submitForm} className="m-2 relative">
         <label>
           <span className="mr-4">Workout name:</span>
@@ -99,11 +127,15 @@ export default function CreateWorkout() {
 
         <h2 className="sub-title">Exercises</h2>
 
-        { Object.keys(selectedExercises).length === 0 ? (<p>Select some exercises</p>) : Object.keys(selectedExercises).map((exerciseId) => (
+        { Object.keys(selectedExercises).length === 0 ? (<p>Select some exercises</p>) : Object.keys(selectedExercises).map((exerciseId) => 
+        (
           <ExerciseSpecifics key={exerciseId} exercise = {exerciseId} setSelectedExercises = {setSelectedExercises}/>
-        )) }
+        )
+        ) }
 
-        <Exercises onExerciseSelect = {addExerciseToWorkout} searchFilter = {Object.keys(selectedExercises)} />
+        {Object.keys(importedExercises).length == 0 && (
+          <Exercises onExerciseSelect = {addExerciseToWorkout} searchFilter = {Object.keys(selectedExercises)} />
+        )}
 
         <button className="border-2 border-gray-400 absolute right-0 top-0">Create</button>
       </form>

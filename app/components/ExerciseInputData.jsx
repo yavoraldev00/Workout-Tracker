@@ -1,13 +1,14 @@
 "use client"
 
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { IoAdd, IoRemove } from "react-icons/io5";
 import { CreateWorkoutContext } from "../(dashboard)/workout/create/CreateWorkout";
 
 
-export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exercise }) {
+export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exercise, importedLoad }) {
+  // Gets function to set exercise data from CreateWorkout
   const { adjustExerciseData } = useContext(CreateWorkoutContext);
-
+  
   // Creates a row for each Set. Component gets rebuilt when the number of sets change
   useEffect(()=>{},[numberOfSets])
   return (<>
@@ -40,7 +41,9 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exerc
                     name="reps"
                     key={`set_${set_number}_reps`}
                     className="bg-amber-200"
-                    placeholder="reps"
+                    placeholder={
+                      (importedLoad[index]) ? importedLoad[index][0] : ""
+                    }
                   />
                   <input
                     required
@@ -49,7 +52,9 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exerc
                     onChange={(e) => {adjustExerciseData(exercise, index, e.target.name, e.target.value)}}
                     key={`set_${set_number}_weight`}
                     className="bg-amber-200"
-                    placeholder="weight"
+                    placeholder={
+                      (importedLoad[index]) ? importedLoad[index][1] : ""
+                    }
                   />
               </div>
           ))
