@@ -10,7 +10,7 @@ export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
   // Number of sets for an exercise. Minimum 1, maximum 5
   const [sets, setSets] = useState(1)
 
-  const { selectedExercises, importedExercises } = useContext(CreateWorkoutContext);
+  const { selectedExercises, importedExercises, editMode } = useContext(CreateWorkoutContext);
   const [importedLoad, setImportedLoad] = useState({});
 
   // If there are imported exercises, sets the number of sets to match it
@@ -27,19 +27,22 @@ export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
     return (
     <div className="flex relative" key={exercise}>
         {/* Button for removing an exercise from the selected exercises list */}
-        <button 
-          onClick={(e) => {
-            e.preventDefault();
-            setSelectedExercises(currentExercises => {
-              const newExercises = { ...currentExercises }; // Create a copy
-              delete newExercises[exercise]; // Remove the exercise by its key
-              return newExercises; // Return the new object
-            })
-          }} 
-          className="absolute top-0 right-0 p-4 cursor-pointer"
-        >
-          < IoClose size={24} color="white" className="bg-red-600"/>
-        </button>
+        
+        {editMode && (
+          <button 
+            onClick={(e) => {
+              e.preventDefault();
+              setSelectedExercises(currentExercises => {
+                const newExercises = { ...currentExercises }; // Create a copy
+                delete newExercises[exercise]; // Remove the exercise by its key
+                return newExercises; // Return the new object
+              })
+            }} 
+            className="absolute top-0 right-0 p-4 cursor-pointer"
+          >
+            < IoClose size={24} color="white" className="bg-red-600"/>
+          </button>
+        )}
 
         {/* Selected exercise image */}
         <Image src={`/exercise_img/${exercise}.gif`} alt="shhh" width={128} height={128}/>
@@ -63,7 +66,7 @@ export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
                 {/* Add button to add another set. Doesn't show if there's 5 sets (maximum) */}
                 {sets < 5 && (
                   <div>
-                    <button onClick={(e)=>{e.preventDefault(); setSets(sets + 1)}} className="mx-auto">
+                    <button onClick={(e)=>{e.preventDefault(); if(editMode){setSets(sets + 1)}}} className="mx-auto">
                       <IoAdd />
                     </button>
                     <div></div>

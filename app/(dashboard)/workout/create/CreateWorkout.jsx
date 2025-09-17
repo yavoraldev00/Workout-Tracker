@@ -17,8 +17,11 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
   // Variable holding the exercise object. Includes name and exercise details
   const [selectedExercises, setSelectedExercises] = useState({})
 
-  // If data is NOT passed to CreateWorkout, starts in creation mode
+  // If data is NOT passed to CreateWorkout (accessed from /create page instead of /workout/[id]), starts in creation mode. Determines which database call is made.
   const [creationMode, setCreationMode] = useState(true)
+
+  // Editable by default. If accessed in /workout/[id], disabled and workout can only be viewed. Changed on "Start workout" and "Edit workout"
+  const [editMode, setEditMode] = useState(true)
 
   useEffect(() => {
     if (selectedWorkoutTemplate) {
@@ -32,6 +35,7 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
 
       setSelectedExercises(exercisesClone);
       setImportedExercises(exercisesClone);
+      setEditMode(false);
     }
   }, []);
 
@@ -113,17 +117,23 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
   }
 
   return (
-    <CreateWorkoutContext.Provider value={{ selectedExercises, adjustExerciseData, importedExercises }}>
+    <CreateWorkoutContext.Provider value={{ selectedExercises, adjustExerciseData, importedExercises, editMode }}>
       <form onSubmit={submitForm} className="m-2 relative">
-        <label>
-          <span className="mr-4">Workout name:</span>
-          <input
-          required
-          type="text"
-          className="border-2 border-gray-400"
-          onChange={(e) =>setWorkoutName(e.target.value)}
-          />
-        </label>
+
+        {/* Shows Workout name if in Edit mode in workout/[id]. Always shown on workout/create page */}
+        {editMode && (
+          <label>
+            <span className="mr-4">Workout name:</span>
+
+            <input
+              required
+              type="text"
+              className="border-2 border-gray-400"
+              onChange={(e) =>setWorkoutName(e.target.value)}
+              value={workoutName}
+            />
+          </label>
+        )}
 
         <h2 className="sub-title">Exercises</h2>
 

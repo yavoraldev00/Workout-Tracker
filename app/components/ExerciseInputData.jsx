@@ -7,7 +7,7 @@ import { CreateWorkoutContext } from "../(dashboard)/workout/create/CreateWorkou
 
 export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exercise, importedLoad }) {
   // Gets function to set exercise data from CreateWorkout
-  const { adjustExerciseData } = useContext(CreateWorkoutContext);
+  const { adjustExerciseData, editMode } = useContext(CreateWorkoutContext);
   
   // Creates a row for each Set. Component gets rebuilt when the number of sets change
   useEffect(()=>{},[numberOfSets])
@@ -21,9 +21,11 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exerc
                       <button
                         onClick={(e) => {
                           e.preventDefault();
-                          setNumberOfSets(numberOfSets - 1);
-                          // tell parent to remove the set data for this exercise (remove last set)
-                          adjustExerciseData(exercise, index, "remove_set");
+                          if(editMode){
+                            setNumberOfSets(numberOfSets - 1);
+                            // tell parent to remove the set data for this exercise (remove last set)
+                            adjustExerciseData(exercise, index, "remove_set");
+                          }
                         }}
                         className="mx-auto"
                       >
@@ -36,6 +38,7 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exerc
 
                   <input
                     required
+                    disabled = {!editMode}
                     type="number"
                     onChange={(e) => {adjustExerciseData(exercise, index, e.target.name, e.target.value)}}
                     name="reps"
@@ -47,6 +50,7 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exerc
                   />
                   <input
                     required
+                    disabled = {!editMode}
                     type="number"
                     name="weight"
                     onChange={(e) => {adjustExerciseData(exercise, index, e.target.name, e.target.value)}}
