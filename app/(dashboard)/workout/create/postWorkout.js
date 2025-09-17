@@ -2,7 +2,6 @@
 
 import { createClient } from "@supabase/supabase-js"
 
-
 export default async function postWorkout(workoutJson) {
     debugger;
     const supabase = createClient(

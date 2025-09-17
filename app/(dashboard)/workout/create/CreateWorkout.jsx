@@ -1,7 +1,8 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState } from "react";
-import SendExercises from "./SendExercises.js"
+import postWorkout from "./postWorkout.js"
+import postExercises from "./postExercises.js"
 import Exercises from "./Exercises";
 import ExerciseSpecifics from "@/app/components/ExerciseSpecifics";
 
@@ -125,7 +126,7 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
   function submitForm(e) {
     e.preventDefault();
 
-    debugger;
+    // debugger;
     // setEditMode(false)
 
     if(Object.keys(selectedExercises).length === 0){
@@ -142,8 +143,18 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
       }
     }
     
-    debugger;
-    SendExercises(dataToSend);
+    // postWorkout(dataToSend);
+
+  
+
+    // Sends data for each exercise performed
+    Object.keys(dataToSend.workout.exercises).forEach((exercise_id) => {
+      // Holds the highest weight used during a workout
+      let max_weight = Math.max(...selectedExercises[exercise_id].load.map(sub => sub[1]));
+
+      postExercises(exercise_id, selectedWorkoutTemplate.user, selectedExercises[exercise_id].load, max_weight, selectedExercises[exercise_id].volume)
+    })
+    
 
     console.log(workoutName)
   }
@@ -199,6 +210,11 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
               <button className="border-2 border-blue-400" type="button" onClick={()=>{setEditMode(false)}}>Cancel Edits</button>
               <button className="border-2 border-blue-400">Submit Edit</button>
             </>
+          )}
+
+          {/* Only shows Submit button in Creation Mode */}
+          {creationMode && (
+            <button className="border-2 border-gray-400">Create</button>
           )}
 
           {/* Only shows Submit button in Creation Mode */}
