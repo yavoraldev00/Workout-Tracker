@@ -30,8 +30,8 @@ export default async function Workouts() {
     <>
       {
         workouts.map(workout => (
-          <Link href={`/workout/${workout.id}`}>
-            <div key={workout.id} className="workout-card">
+          <Link key={workout.id} href={`/workout/${workout.id}`}>
+            <div className="workout-card">
               <h3>{workout.workout.name}</h3>
             </div>
           </Link>

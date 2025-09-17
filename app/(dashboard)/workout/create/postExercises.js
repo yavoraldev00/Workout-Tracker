@@ -20,12 +20,11 @@ export default async function postExercises(exercise_id, user, volume, max_weigh
         total_load: total_load
         }
     ])
+    .select()
 
     if (error) {
     console.error("Insert error:", error)
-    debugger;
     } else {
-    console.log("Workout saved:", data)
-    debugger;
+    console.log("Exercise saved:", data)
     }
 }

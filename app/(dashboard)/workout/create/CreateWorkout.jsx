@@ -5,6 +5,7 @@ import postWorkout from "./postWorkout.js"
 import postExercises from "./postExercises.js"
 import Exercises from "./Exercises";
 import ExerciseSpecifics from "@/app/components/ExerciseSpecifics";
+import { usePathname, useRouter } from "next/navigation.js";
 
 // Context for passing variables and functions from createContext to ExerciseInputData
 export const CreateWorkoutContext = createContext();
@@ -28,24 +29,59 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
   // Variable for showing the error message if a workout has no exercises
   const [selectExercisesError, setSelectExercisesError] = useState(false)
 
+  // Router for navigating user to home page after workout creation
+  const router = useRouter();
+
+  // Pathname of the current page, used for cancelling edits made to template
+  const pathname = usePathname();
+
+  // Shows error after submitting an empty workout template, until an exercise is selected
   useEffect(() => {
     if(Object.keys(selectedExercises).length > 0){
       setSelectExercisesError(false)
     }
   },[selectedExercises])
 
+  // Copies over template data to the current exercise data
+  function setTemplateData() {
+    // 1. Update the workout name
+    setWorkoutName(selectedWorkoutTemplate.workout.name);
+
+    // 2. Deep-clone the exercises object
+    const exercisesClone = structuredClone(selectedWorkoutTemplate.workout.exercises);
+
+    setSelectedExercises(exercisesClone);
+    setImportedExercises(exercisesClone);
+
+    // // Spaghetti code from AI
+    // const rawExercises = structuredClone(selectedWorkoutTemplate.workout.exercises);
+
+    // const normalizedExercises = {};
+
+    // Object.entries(rawExercises).forEach(([exerciseId, data]) => {
+    //   const loads = Array.isArray(data.load) ? data.load.map(set => {
+    //     // Ensure each set is a valid [reps, weight] array
+    //     return Array.isArray(set) && set.length === 2 ? set : [0, 0];
+    //   }) : [[]];
+
+    //   const volume = loads.reduce((sum, [reps, weight]) => sum + reps * weight, 0);
+
+    //   normalizedExercises[exerciseId] = {
+    //     load: loads,
+    //     volume
+    //   };
+    // });
+
+    // setSelectedExercises(normalizedExercises);
+    // setImportedExercises(normalizedExercises);
+  }
+
+  // If page is a specific workout/[id], copies over data and turns off creation mode
   useEffect(() => {
     if (selectedWorkoutTemplate) {
-      // 1. Update the workout name
-      setWorkoutName(selectedWorkoutTemplate.workout.name);
+      // Calls template setting
+      setTemplateData();
 
-      // 2. Deep-clone the exercises object
-      //    - structuredClone is native in modern browsers/node
-      //    - fallback: JSON.parse(JSON.stringify(...))
-      const exercisesClone = structuredClone(selectedWorkoutTemplate.workout.exercises);
-
-      setSelectedExercises(exercisesClone);
-      setImportedExercises(exercisesClone);
       setEditMode(false);
       setCreationMode(false);
     }
@@ -107,6 +143,7 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
     });
   };
 
+  // Adds exercise to selected exercises object
   function addExerciseToWorkout(exerciseToAdd) {
     // Check if the exercise ID doesn't already exist as a key
     if (!selectedExercises.hasOwnProperty(exerciseToAdd.exerciseId)) {
@@ -122,41 +159,58 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
     }
   }
 
+  // Cancels changes made in edit mode
+  function cancelEditMode(){
+    setEditMode(false)
+    setTemplateData()
+  }
+
   // Sends data to the database and redirects the user to the dashboard
-  function submitForm(e) {
+  async function submitForm(e) {
+    // Prevents form button from refreshing page
     e.preventDefault();
 
-    // debugger;
-    // setEditMode(false)
-
+    // If there are no selected exercises, shows an error
     if(Object.keys(selectedExercises).length === 0){
       setSelectExercisesError(true);
       return
     }
 
+    // Variable storing data to send to database to update workout
     const dataToSend = {
-      id: (Object.keys(selectedWorkoutTemplate).length > 0) ? selectedWorkoutTemplate.id : null,
+      // ID to update. If editing an existing template, uses that ID. If creating a new template, does not need an ID to upload workout
+      id: (selectedWorkoutTemplate) ? selectedWorkoutTemplate.id : undefined,
       user_email: "me@gmail.com",
       workout: {
         name: workoutName,
         exercises: selectedExercises
       }
     }
-    
-    // postWorkout(dataToSend);
 
+    // If NOT in template creation mode OR in edit mode, sends data about each exercise performed
+    if(!creationMode | editMode){
+      Object.keys(dataToSend.workout.exercises).forEach((exercise_id) => {
+        // Holds the highest weight used during a workout
+        let max_weight = Math.max(...selectedExercises[exercise_id].load.map(sub => sub[1]));
   
+        postExercises(exercise_id, selectedWorkoutTemplate.user, selectedExercises[exercise_id].load, max_weight, selectedExercises[exercise_id].volume)
+      })
+    }
 
-    // Sends data for each exercise performed
-    Object.keys(dataToSend.workout.exercises).forEach((exercise_id) => {
-      // Holds the highest weight used during a workout
-      let max_weight = Math.max(...selectedExercises[exercise_id].load.map(sub => sub[1]));
-
-      postExercises(exercise_id, selectedWorkoutTemplate.user, selectedExercises[exercise_id].load, max_weight, selectedExercises[exercise_id].volume)
-    })
+    // Variable holding the type of request to be made. If in creation mode, creates a new workout.
+    // If NOT in creation mode, updates current workout
+    const sendMethod = (creationMode) ? "INSERT" : "UPDATE"
     
+    // Function call to send data to database
+    await postWorkout(dataToSend, sendMethod);
 
-    console.log(workoutName)
+    // If in creation mode, sends user to home screen
+    if(creationMode){
+      router.push("/")
+    }
+
+    // Refreshes fetch request to update database
+    router.refresh()
   }
 
   return (
@@ -207,14 +261,9 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
           {/* Only shows buttons in Edit Mode and when NOT in Creation Mode*/}
           {(editMode && !creationMode) && (
             <>
-              <button className="border-2 border-blue-400" type="button" onClick={()=>{setEditMode(false)}}>Cancel Edits</button>
+              <button className="border-2 border-blue-400" type="button" onClick={()=>{cancelEditMode()}}>Cancel Edits</button>
               <button className="border-2 border-blue-400">Submit Edit</button>
             </>
-          )}
-
-          {/* Only shows Submit button in Creation Mode */}
-          {creationMode && (
-            <button className="border-2 border-gray-400">Create</button>
           )}
 
           {/* Only shows Submit button in Creation Mode */}
