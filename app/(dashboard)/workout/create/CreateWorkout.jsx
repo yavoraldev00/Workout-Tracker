@@ -36,6 +36,7 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
       setSelectedExercises(exercisesClone);
       setImportedExercises(exercisesClone);
       setEditMode(false);
+      setCreationMode(false);
     }
   }, []);
 
@@ -147,7 +148,30 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
           <Exercises onExerciseSelect = {addExerciseToWorkout} searchFilter = {Object.keys(selectedExercises)} />
         )}
 
-        <button className="border-2 border-gray-400 absolute right-0 top-0">Create</button>
+        {/* Container for form buttons. Edit, Finish eiditng, Finish workout, Create */}
+        <div className="flex gap-2 bg-cyan-300 absolute right-0 top-0">
+
+          {/* Only shows buttons when in View Mode / not in Edit or Creation mode */}
+          {(!editMode && !creationMode) && (
+            <>
+              <button className="border-2 border-green-400" type="button" onClick={()=>{setEditMode(true)}}>Edit Mode</button>
+              <button className="border-2 border-green-400" type="button" onClick={()=>{setEditMode(true)}}>Start Workout</button>
+            </>
+          )}
+
+          {/* Only shows buttons in Edit Mode and when NOT in Creation Mode*/}
+          {(editMode && !creationMode) && (
+            <>
+              <button className="border-2 border-blue-400" type="button" onClick={()=>{setEditMode(false)}}>Cancel Edits</button>
+              <button className="border-2 border-blue-400" type="button" onClick={()=>{setEditMode(false)}}>Submit Edit</button>
+            </>
+          )}
+
+          {/* Only shows Submit button in Creation Mode */}
+          {creationMode && (
+            <button className="border-2 border-gray-400">Create</button>
+          )}
+        </div>
       </form>
     </CreateWorkoutContext.Provider>
   )
