@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState } from "react";
+import SendExercises from "./SendExercises.js"
 import Exercises from "./Exercises";
 import ExerciseSpecifics from "@/app/components/ExerciseSpecifics";
 
@@ -22,6 +23,15 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
 
   // Editable by default. If accessed in /workout/[id], disabled and workout can only be viewed. Changed on "Start workout" and "Edit workout"
   const [editMode, setEditMode] = useState(true)
+
+  // Variable for showing the error message if a workout has no exercises
+  const [selectExercisesError, setSelectExercisesError] = useState(false)
+
+  useEffect(() => {
+    if(Object.keys(selectedExercises).length > 0){
+      setSelectExercisesError(false)
+    }
+  },[selectedExercises])
 
   useEffect(() => {
     if (selectedWorkoutTemplate) {
@@ -111,8 +121,29 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
     }
   }
 
-  async function submitForm(e) {
+  // Sends data to the database and redirects the user to the dashboard
+  function submitForm(e) {
     e.preventDefault();
+
+    debugger;
+    // setEditMode(false)
+
+    if(Object.keys(selectedExercises).length === 0){
+      setSelectExercisesError(true);
+      return
+    }
+
+    const dataToSend = {
+      id: (Object.keys(selectedWorkoutTemplate).length > 0) ? selectedWorkoutTemplate.id : null,
+      user_email: "me@gmail.com",
+      workout: {
+        name: workoutName,
+        exercises: selectedExercises
+      }
+    }
+    
+    debugger;
+    SendExercises(dataToSend);
 
     console.log(workoutName)
   }
@@ -150,6 +181,9 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
 
         {/* Container for form buttons. Edit, Finish eiditng, Finish workout, Create */}
         <div className="flex gap-2 bg-cyan-300 absolute right-0 top-0">
+          {selectExercisesError && (
+            <div className="absolute top-0 right-0 -translate-y-[150%] text-nowrap z-9 bg-amber-500">Please add at least 1 exercise</div>
+          )}
 
           {/* Only shows buttons when in View Mode / not in Edit or Creation mode */}
           {(!editMode && !creationMode) && (
@@ -163,7 +197,7 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
           {(editMode && !creationMode) && (
             <>
               <button className="border-2 border-blue-400" type="button" onClick={()=>{setEditMode(false)}}>Cancel Edits</button>
-              <button className="border-2 border-blue-400" type="button" onClick={()=>{setEditMode(false)}}>Submit Edit</button>
+              <button className="border-2 border-blue-400">Submit Edit</button>
             </>
           )}
 
