@@ -10,7 +10,7 @@ export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
   // Number of sets for an exercise. Minimum 1, maximum 5
   const [sets, setSets] = useState(1)
 
-  const { selectedExercises, importedExercises, editMode } = useContext(CreateWorkoutContext);
+  const { selectedExercises, importedExercises, formMode } = useContext(CreateWorkoutContext);
   const [importedLoad, setImportedLoad] = useState({});
 
   // If there are imported exercises, sets the number of sets to match it
@@ -28,7 +28,7 @@ export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
     <div className="flex relative" key={exercise}>
         {/* Button for removing an exercise from the selected exercises list */}
         
-        {editMode && (
+        {(formMode == "Edit" || formMode == "Create") && (
           <button 
             onClick={(e) => {
               e.preventDefault();
@@ -64,9 +64,10 @@ export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
                 />
 
                 {/* Add button to add another set. Doesn't show if there's 5 sets (maximum) */}
+                {/* Cannot new sets in "View" mode */}
                 {sets < 5 && (
                   <div>
-                    <button onClick={(e)=>{e.preventDefault(); if(editMode){setSets(sets + 1)}}} className="mx-auto">
+                    <button onClick={(e)=>{e.preventDefault(); if(!(formMode == "View")){setSets(sets + 1)}}} className="mx-auto">
                       <IoAdd />
                     </button>
                     <div></div>

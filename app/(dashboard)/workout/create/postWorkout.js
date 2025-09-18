@@ -38,8 +38,12 @@ export default async function postWorkout(workoutJson, method) {
 
         if (error) {
             console.error("Update error:", error)
+
+            return error
         } else {
             console.log("Workout updated:", data)
+            
+            return method
         }
     }
 }

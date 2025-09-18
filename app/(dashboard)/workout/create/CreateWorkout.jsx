@@ -20,11 +20,10 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
   // Variable holding the exercise object. Includes name and exercise details
   const [selectedExercises, setSelectedExercises] = useState({})
 
-  // If data is NOT passed to CreateWorkout (accessed from /create page instead of /workout/[id]), starts in creation mode. Determines which database call is made.
-  const [creationMode, setCreationMode] = useState(true)
-
-  // Editable by default. If accessed in /workout/[id], disabled and workout can only be viewed. Changed on "Start workout" and "Edit workout"
-  const [editMode, setEditMode] = useState(true)
+  // Stores the viewing mode of the show, which enabled / disables functionality depending on the mode
+  // [ "Create", "View", "Edit", "Workout" ]
+  // Starts off in "Create" mode by default. Changes to "View" if component called from workout/[id]
+  const [formMode, setFormMode] = useState("Create")
 
   // Variable for showing the error message if a workout has no exercises
   const [selectExercisesError, setSelectExercisesError] = useState(false)
@@ -52,28 +51,6 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
 
     setSelectedExercises(exercisesClone);
     setImportedExercises(exercisesClone);
-
-    // // Spaghetti code from AI
-    // const rawExercises = structuredClone(selectedWorkoutTemplate.workout.exercises);
-
-    // const normalizedExercises = {};
-
-    // Object.entries(rawExercises).forEach(([exerciseId, data]) => {
-    //   const loads = Array.isArray(data.load) ? data.load.map(set => {
-    //     // Ensure each set is a valid [reps, weight] array
-    //     return Array.isArray(set) && set.length === 2 ? set : [0, 0];
-    //   }) : [[]];
-
-    //   const volume = loads.reduce((sum, [reps, weight]) => sum + reps * weight, 0);
-
-    //   normalizedExercises[exerciseId] = {
-    //     load: loads,
-    //     volume
-    //   };
-    // });
-
-    // setSelectedExercises(normalizedExercises);
-    // setImportedExercises(normalizedExercises);
   }
 
   // If page is a specific workout/[id], copies over data and turns off creation mode
@@ -82,8 +59,7 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
       // Calls template setting
       setTemplateData();
 
-      setEditMode(false);
-      setCreationMode(false);
+      setFormMode("View");
     }
   }, []);
 
@@ -152,17 +128,23 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
         ...currentExercises,
         // Add the new exercise with its ID as the key
         [exerciseToAdd.exerciseId]: {
-          exercise_load: [[]],
+          load: [[]],
           volume: 0
         }
       }));
     }
   }
 
-  // Cancels changes made in edit mode
-  function cancelEditMode(){
-    setEditMode(false)
-    setTemplateData()
+  // Cancels "Edit" or "Workout" mode, resets all data, refreshes page
+  function cancelEditOrWorkoutMode(){
+    setFormMode("View")
+    
+    // I do not understand why emptying it and then adding it back in 1ms renders it correctly but it do :)
+    setSelectedExercises([])
+
+    setTimeout(() => {
+      setTemplateData()
+    }, 1);
   }
 
   // Sends data to the database and redirects the user to the dashboard
@@ -187,8 +169,8 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
       }
     }
 
-    // If NOT in template creation mode OR in edit mode, sends data about each exercise performed
-    if(!creationMode | editMode){
+    // If NOT in "Workout" mode, sends data about each exercise performed
+    if(formMode == "Workout"){
       Object.keys(dataToSend.workout.exercises).forEach((exercise_id) => {
         // Holds the highest weight used during a workout
         let max_weight = Math.max(...selectedExercises[exercise_id].load.map(sub => sub[1]));
@@ -199,26 +181,30 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
 
     // Variable holding the type of request to be made. If in creation mode, creates a new workout.
     // If NOT in creation mode, updates current workout
-    const sendMethod = (creationMode) ? "INSERT" : "UPDATE"
+    const sendMethod = (formMode == "Create") ? "INSERT" : "UPDATE"
     
-    // Function call to send data to database
-    await postWorkout(dataToSend, sendMethod);
+    // Function call to send data to database. Returns the request response (error or data)
+    const res = await postWorkout(dataToSend, sendMethod);
 
-    // If in creation mode, sends user to home screen
-    if(creationMode){
-      router.push("/")
+    if(res.message){
+      alert(res.message)
+    }else{
+      // If in "Create" or "Workout" mode, sends user to home screen
+      if(formMode == "Create" || formMode == "Workout"){
+        router.push("/")
+      }
+  
+      // Refreshes fetch request to update database
+      router.refresh()
     }
-
-    // Refreshes fetch request to update database
-    router.refresh()
   }
 
   return (
-    <CreateWorkoutContext.Provider value={{ selectedExercises, adjustExerciseData, importedExercises, editMode }}>
+    <CreateWorkoutContext.Provider value={{ selectedExercises, adjustExerciseData, importedExercises, formMode }}>
       <form onSubmit={submitForm} className="m-2 relative">
 
-        {/* Shows Workout name if in Edit mode in workout/[id]. Always shown on workout/create page */}
-        {editMode && (
+        {/* Shows Workout name if in "Edit" or "Crete" mode */}
+        {(formMode == "Edit" || formMode == "Create") && (
           <label>
             <span className="mr-4">Workout name:</span>
 
@@ -250,25 +236,33 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
             <div className="absolute top-0 right-0 -translate-y-[150%] text-nowrap z-9 bg-amber-500">Please add at least 1 exercise</div>
           )}
 
-          {/* Only shows buttons when in View Mode / not in Edit or Creation mode */}
-          {(!editMode && !creationMode) && (
+          {/* Only shows buttons when in "View" mode */}
+          {(formMode == "View") && (
             <>
-              <button className="border-2 border-green-400" type="button" onClick={()=>{setEditMode(true)}}>Edit Mode</button>
-              <button className="border-2 border-green-400" type="button" onClick={()=>{setEditMode(true)}}>Start Workout</button>
+              <button className="border-2 border-green-400" type="button" onClick={()=>{setFormMode("Edit")}}>Edit Mode</button>
+              <button className="border-2 border-green-400" type="button" onClick={()=>{setFormMode("Workout")}}>Start Workout</button>
             </>
           )}
 
-          {/* Only shows buttons in Edit Mode and when NOT in Creation Mode*/}
-          {(editMode && !creationMode) && (
+          {/* Only shows buttons in "Edit" mode */}
+          {formMode == "Edit" && (
             <>
-              <button className="border-2 border-blue-400" type="button" onClick={()=>{cancelEditMode()}}>Cancel Edits</button>
+              <button className="border-2 border-blue-400" type="button" onClick={()=>{cancelEditOrWorkoutMode()}}>Cancel Edits</button>
               <button className="border-2 border-blue-400">Submit Edit</button>
             </>
           )}
 
-          {/* Only shows Submit button in Creation Mode */}
-          {creationMode && (
+          {/* Only shows button in "Create" mode */}
+          {formMode == "Create" && (
             <button className="border-2 border-gray-400">Create</button>
+          )}
+
+          {/* Only shows buttons in "Workout" mode */}
+          {formMode == "Workout" && (
+            <>
+              <button className="border-2 border-gray-400" onClick={()=>{cancelEditOrWorkoutMode()}}>Cancel workout</button>
+              <button className="border-2 border-gray-400">Submit workout</button>
+            </>
           )}
         </div>
       </form>

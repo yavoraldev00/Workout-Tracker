@@ -3,11 +3,12 @@
 import { useContext, useEffect, useState } from "react";
 import { IoAdd, IoRemove } from "react-icons/io5";
 import { CreateWorkoutContext } from "../(dashboard)/workout/create/CreateWorkout";
+import { delayUntilRuntimeStage } from "next/dist/server/app-render/dynamic-rendering";
 
 
 export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exercise, importedLoad }) {
   // Gets function to set exercise data from CreateWorkout
-  const { adjustExerciseData, editMode } = useContext(CreateWorkoutContext);
+  const { adjustExerciseData, formMode } = useContext(CreateWorkoutContext);
   
   // Creates a row for each Set. Component gets rebuilt when the number of sets change
   useEffect(()=>{},[numberOfSets])
@@ -21,7 +22,9 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exerc
                       <button
                         onClick={(e) => {
                           e.preventDefault();
-                          if(editMode){
+
+                          // If NOT in "View" mode, allows user to add or remove sets
+                          if(!(formMode == "View")){
                             setNumberOfSets(numberOfSets - 1);
                             // tell parent to remove the set data for this exercise (remove last set)
                             adjustExerciseData(exercise, index, "remove_set");
@@ -38,7 +41,7 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exerc
 
                   <input
                     required
-                    disabled = {!editMode}
+                    disabled = {formMode == "View"} // Disables inputs in "View" mode
                     type="number"
                     onChange={(e) => {adjustExerciseData(exercise, index, e.target.name, e.target.value)}}
                     name="reps"
@@ -50,7 +53,7 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exerc
                   />
                   <input
                     required
-                    disabled = {!editMode}
+                    disabled = {formMode == "View"} // Disables inputs in "View mode"
                     type="number"
                     name="weight"
                     onChange={(e) => {adjustExerciseData(exercise, index, e.target.name, e.target.value)}}
