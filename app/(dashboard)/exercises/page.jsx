@@ -1,7 +1,7 @@
-import ExerciseSpecifics from "@/app/components/ExerciseSpecifics";
+import Exercises from "@/app/components/Exercises";
 
 export default function page() {
   return (
-    <ExerciseSpecifics />
+    <Exercises searchFilter={""}/>
   )
 }

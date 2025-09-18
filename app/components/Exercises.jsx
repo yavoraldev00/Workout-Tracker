@@ -1,8 +1,9 @@
 "use client"
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { IoAdd, IoClose } from "react-icons/io5";
+import ExerciseItem from "./ExerciseItem";
 
 // API call to get exercises
 async function getExercises() {
@@ -17,15 +18,8 @@ export default function Exercises({ onExerciseSelect, searchFilter }) {
 
   // Sets the initial exercises with API call 
   useEffect(()=>{
-    getExercises(searchFilter).then(res => setExercises(res))
+      getExercises(searchFilter).then(res => setExercises(res))
   }, [])
-
-  // // After an exercise is selected, removes it
-  // useEffect(()=>{
-  //   setExercises(
-  //     exercises.filter((el) =>{return !searchFilter.includes(el.exerciseId)})
-  //   )
-  // }, [searchFilter])
 
   // When rendering, only show ones not in searchFilter
   const visible = exercises.filter(ex =>
@@ -39,25 +33,7 @@ export default function Exercises({ onExerciseSelect, searchFilter }) {
           < IoAdd size={50} color="black"/>
         </button>
       ) : (
-        <>
-        <button onClick={(e)=>{e.preventDefault(); setAddNew(false)}} className="absolute top-0 right-0 p-4 cursor-pointer">
-          < IoClose size={24} color="white" className="bg-red-600"/>
-        </button>
-        {visible.map(exr => (
-          <div key={exr.exerciseId}
-            onClick={() => {setAddNew(false); onExerciseSelect(exr)}}
-            className="cursor-pointer flex w-full border-2 border-gray-400">
-          
-          <Image
-            src={"/exercise_img/"+exr.gifUrl}
-            alt="none"
-            width={100}
-            height={100}/>
-
-          <h3>{exr.name}</h3>
-          </div>
-        ))}
-        </>
+        <ExerciseItem onExerciseSelect = {onExerciseSelect} setAddNew = {setAddNew} visible={visible}/>
       )
     }
 
