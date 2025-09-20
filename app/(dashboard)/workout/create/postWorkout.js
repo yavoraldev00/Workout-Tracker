@@ -22,8 +22,12 @@ export default async function postWorkout(workoutJson, method) {
 
         if (error) {
             console.error("Insert error:", error)
+
+            return error
         } else {
             console.log("Workout saved:", data)
+
+            return error
         }
     }else if(method == "UPDATE"){
         // Update workout
@@ -43,7 +47,7 @@ export default async function postWorkout(workoutJson, method) {
         } else {
             console.log("Workout updated:", data)
             
-            return method
+            return error
         }
     }
 }

@@ -16,10 +16,13 @@ export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
   // If there are imported exercises, sets the number of sets to match it
   useEffect(() => {
     if(Object.keys(importedExercises).length > 0){
-      setSets(importedExercises[exercise].load.length);
-
-      const loadToImport = structuredClone(importedExercises[exercise].load);
-      setImportedLoad(loadToImport);
+      // Checks if there is data for an imported exercise and adds it as a placeholder
+      if(importedExercises[exercise]){
+        setSets(importedExercises[exercise].load.length);
+  
+        const loadToImport = structuredClone(importedExercises[exercise].load);
+        setImportedLoad(loadToImport);
+      }
     }
     // Only runs it on the initial build
   }, []);

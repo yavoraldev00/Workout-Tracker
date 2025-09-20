@@ -6,6 +6,7 @@ import postExercises from "./postExercises.js"
 import Exercises from "../../../components/Exercises.jsx";
 import ExerciseSpecifics from "@/app/components/ExerciseSpecifics";
 import { usePathname, useRouter } from "next/navigation.js";
+import AddExercise from "@/app/components/AddExercise.jsx";
 
 // Context for passing variables and functions from createContext to ExerciseInputData
 export const CreateWorkoutContext = createContext();
@@ -186,9 +187,13 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
     // Function call to send data to database. Returns the request response (error or data)
     const res = await postWorkout(dataToSend, sendMethod);
 
-    if(res.message){
+    // If the response is an error, alerts the error. If there is no error, changes the form mode to "View" and redirects the user if needed
+    if(res){
       alert(res.message)
     }else{
+      // Sets the mode to "View"
+      setFormMode("View")
+
       // If in "Create" or "Workout" mode, sends user to home screen
       if(formMode == "Create" || formMode == "Workout"){
         router.push("/")
@@ -200,7 +205,7 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
   }
 
   return (
-    <CreateWorkoutContext.Provider value={{ selectedExercises, adjustExerciseData, importedExercises, formMode }}>
+    <CreateWorkoutContext.Provider value={{ selectedExercises, addExerciseToWorkout, adjustExerciseData, importedExercises, formMode }}>
       <form onSubmit={submitForm} className="m-2 relative">
 
         {/* Shows Workout name if in "Edit" or "Crete" mode */}
@@ -228,8 +233,13 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
         ) }
 
         {/* Allows user to select exercises to add to their workout */}
-        {Object.keys(importedExercises).length == 0 && (
+        {/* {Object.keys(importedExercises).length == 0 && (
           <Exercises onExerciseSelect = {addExerciseToWorkout} searchFilter = {Object.keys(selectedExercises)} />
+        )} */}
+
+        {/* Allows user to select exercises to add, only shown in "Edit" and "Create" mode */}
+        {(formMode == "Edit" || formMode == "Create") && (
+          <AddExercise />
         )}
 
         {/* Container for form buttons. Edit, Finish eiditng, Finish workout, Create */}

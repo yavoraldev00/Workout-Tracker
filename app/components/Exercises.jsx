@@ -6,7 +6,7 @@ import { IoAdd, IoClose } from "react-icons/io5";
 import ExerciseItem from "./ExerciseItem";
 
 // API call to get exercises
-async function getExercises() {
+export async function getExercises() {
   const res = await fetch("http://localhost:4000/exercises")
 
   return res.json();
