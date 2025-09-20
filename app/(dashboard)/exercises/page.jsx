@@ -1,7 +1,7 @@
-import Exercises from "@/app/components/Exercises";
+import ExerciseList from "./ExerciseList";
 
 export default function page() {
   return (
-    <Exercises searchFilter={""}/>
+    <ExerciseList />
   )
 }
