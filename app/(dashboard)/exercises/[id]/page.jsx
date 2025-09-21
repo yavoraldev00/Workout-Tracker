@@ -1,4 +1,5 @@
-// "use client"
+import { createClient } from "@supabase/supabase-js"
+import ExerciseHistory from "./ExerciseHistory";
 
 // API call to get exercises
 export async function getExercises() {
@@ -19,21 +20,46 @@ async function filterSingularExercise(exercise_id) {
   return selected_exercise;
 }
 
+// Database call to retrieve workout history for user
+async function getExerciseHistory(exercise_id) {
+    
+    const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+    )
+
+    const { data, error } = await supabase
+    .from("Exercises")
+    .select("*")
+    .eq("user", "me@gmail.com")
+    .eq("exercise_id", exercise_id)
+
+    if (error){
+      console.error("Error with", error);
+      return [];
+    }
+
+    return data;
+}
+
 export default async function page({ params }) {
   const { id } = await params
 
   const exercise_data = await filterSingularExercise(id)
 
+  const exercise_history = await getExerciseHistory(id)
+
   return (
-    <div>
+    <main>
       <div>Exercise {id}</div>
       <div>
-      {
+      {/* {
         Object.keys(exercise_data).map((key) => (
           <div>{exercise_data[key]}</div>
         ))
-      }
+      } */}
+      <ExerciseHistory exercise_data = {exercise_data} exercise_history = {exercise_history} />
       </div>
-    </div>
+    </main>
   )
 }
