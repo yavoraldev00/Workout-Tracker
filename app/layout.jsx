@@ -18,6 +18,7 @@ export const metadata = {
 
 // components
 import Navbar from "./components/Navbar";
+import { redirect } from "next/navigation";
 
 export default function RootLayout({ children }) {
   return (
@@ -25,10 +26,8 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
-        <main>
-          {children}
-        </main>
+      
+      {children}
       </body>
     </html>
   );
