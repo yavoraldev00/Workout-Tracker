@@ -3,7 +3,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import postWorkout from "./postWorkout.js"
 import postExercises from "./postExercises.js"
-import Exercises from "../../../components/Exercises.jsx";
 import ExerciseSpecifics from "@/app/components/ExerciseSpecifics";
 import { usePathname, useRouter } from "next/navigation.js";
 import AddExercise from "@/app/components/AddExercise.jsx";
@@ -231,11 +230,6 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
           <ExerciseSpecifics key={exerciseId} exercise = {exerciseId} setSelectedExercises = {setSelectedExercises}/>
         )
         ) }
-
-        {/* Allows user to select exercises to add to their workout */}
-        {/* {Object.keys(importedExercises).length == 0 && (
-          <Exercises onExerciseSelect = {addExerciseToWorkout} searchFilter = {Object.keys(selectedExercises)} />
-        )} */}
 
         {/* Allows user to select exercises to add, only shown in "Edit" and "Create" mode */}
         {(formMode == "Edit" || formMode == "Create") && (

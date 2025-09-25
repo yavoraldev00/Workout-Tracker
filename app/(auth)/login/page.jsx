@@ -72,6 +72,8 @@ export default function page() {
       }
     
       if(!error){
+        router.push("/verify")
+
         return error
       }
     }
