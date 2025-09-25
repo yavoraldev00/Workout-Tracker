@@ -3,13 +3,13 @@ import Navbar from "../components/Navbar";
 import { cookies } from "next/headers";
 import { createClient } from "@supabase/supabase-js";
 import { createBrowserClient } from "@supabase/ssr";
+import { UserProvider } from "./UserProvider"; // Context provider, enabling access to username and email through app
 
 export default async function DashboardLayout({ children }) {
 
     // if(true){
     //     redirect("/login")
     // }
-    
     // 1. Read cookies set by your /api/set-session route
   const cookieStore = await cookies();
   const access_token = cookieStore.get("access_token")?.value;
@@ -43,14 +43,17 @@ export default async function DashboardLayout({ children }) {
   }
 
   // 4. Access user metadata
-  const displayName = user.user_metadata?.display_name ?? "Anonymous";
+  const userName = user.user_metadata?.display_name ?? "NoName";
+  const userEmail = user.user_metadata?.email ?? "NoEmail";
   return (
     <>
+    <UserProvider userName={userName} userEmail={userEmail}>
         <Navbar />
         <main>
-          <div>WORKKKK PLEASE {displayName}</div>
+          <div>WORKKKK PLEASE {userName}</div>
             {children}
         </main>
+    </UserProvider>
     </>
   )
 }
