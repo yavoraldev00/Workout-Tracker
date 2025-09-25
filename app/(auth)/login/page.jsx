@@ -37,7 +37,6 @@ export default function page() {
       })
     
       if(error){
-        debugger;
         return error
       }
     
@@ -49,9 +48,6 @@ export default function page() {
           body: JSON.stringify(session),
           headers: { "Content-Type": "application/json" },
         });
-
-        debugger;
-
 
         router.push("/")
         router.refresh()
@@ -72,12 +68,10 @@ export default function page() {
       })
     
       if(error){
-        debugger;
         return error
       }
     
       if(!error){
-        debugger;
         return error
       }
     }
