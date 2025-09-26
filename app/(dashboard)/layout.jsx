@@ -50,7 +50,6 @@ export default async function DashboardLayout({ children }) {
     <UserProvider userName={userName} userEmail={userEmail}>
         <Navbar />
         <main>
-          <div>WORKKKK PLEASE {userName}</div>
             {children}
         </main>
     </UserProvider>

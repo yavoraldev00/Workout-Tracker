@@ -26,7 +26,7 @@ export default function UserDropdown() {
     <>
     <button
         onClick={() => setOpen(!open)}
-        className="bg-gray-500 cursor-pointer p-4"
+        className="bg-white cursor-pointer p-4 text-lg font-semibold rounded-2xl"
     >
         {userName}
     </button>

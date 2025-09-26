@@ -6,11 +6,15 @@ import postExercises from "./postExercises.js"
 import ExerciseSpecifics from "@/app/components/ExerciseSpecifics";
 import { usePathname, useRouter } from "next/navigation.js";
 import AddExercise from "@/app/components/AddExercise.jsx";
+import { useUser } from "../../UserProvider.jsx";
 
 // Context for passing variables and functions from createContext to ExerciseInputData
 export const CreateWorkoutContext = createContext();
 
 export default function CreateWorkout({ selectedWorkoutTemplate }) {
+  // Gets the user email from user provider, to pass onto form submission
+  const { userEmail } = useUser();
+
   // Variable that stores the imported workout, if there is one
   const [importedExercises, setImportedExercises] = useState({})
   
@@ -162,7 +166,7 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
     const dataToSend = {
       // ID to update. If editing an existing template, uses that ID. If creating a new template, does not need an ID to upload workout
       id: (selectedWorkoutTemplate) ? selectedWorkoutTemplate.id : undefined,
-      user_email: "me@gmail.com",
+      user_email: userEmail,
       workout: {
         name: workoutName,
         exercises: selectedExercises
@@ -237,7 +241,7 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
         )}
 
         {/* Container for form buttons. Edit, Finish eiditng, Finish workout, Create */}
-        <div className="flex gap-2 bg-cyan-300 absolute right-0 top-0">
+        <div className="flex gap-2 absolute right-0 top-0">
           {selectExercisesError && (
             <div className="absolute top-0 right-0 -translate-y-[150%] text-nowrap z-9 bg-amber-500">Please add at least 1 exercise</div>
           )}
@@ -245,29 +249,29 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
           {/* Only shows buttons when in "View" mode */}
           {(formMode == "View") && (
             <>
-              <button className="border-2 border-green-400" type="button" onClick={()=>{setFormMode("Edit")}}>Edit Mode</button>
-              <button className="border-2 border-green-400" type="button" onClick={()=>{setFormMode("Workout")}}>Start Workout</button>
+              <button className="pill-shape bg-blue-400 cursor-pointer" type="button" onClick={()=>{setFormMode("Edit")}}>Edit Mode</button>
+              <button className="pill-shape bg-green-400 cursor-pointer" type="button" onClick={()=>{setFormMode("Workout")}}>Start Workout</button>
             </>
           )}
 
           {/* Only shows buttons in "Edit" mode */}
           {formMode == "Edit" && (
             <>
-              <button className="border-2 border-blue-400" type="button" onClick={()=>{cancelEditOrWorkoutMode()}}>Cancel Edits</button>
-              <button className="border-2 border-blue-400">Submit Edit</button>
+              <button className="pill-shape bg-red-500 cursor-pointer" type="button" onClick={()=>{cancelEditOrWorkoutMode()}}>Cancel Edits</button>
+              <button className="pill-shape bg-blue-400 cursor-pointer">Submit Edit</button>
             </>
           )}
 
           {/* Only shows button in "Create" mode */}
           {formMode == "Create" && (
-            <button className="border-2 border-gray-400">Create</button>
+            <button className="pill-shape bg-green-400 cursor-pointer">Create</button>
           )}
 
           {/* Only shows buttons in "Workout" mode */}
           {formMode == "Workout" && (
             <>
-              <button className="border-2 border-gray-400" onClick={()=>{cancelEditOrWorkoutMode()}}>Cancel workout</button>
-              <button className="border-2 border-gray-400">Submit workout</button>
+              <button className="pill-shape bg-red-500 cursor-pointer" onClick={()=>{cancelEditOrWorkoutMode()}}>Cancel workout</button>
+              <button className="pill-shape bg-green-400 cursor-pointer">Submit workout</button>
             </>
           )}
         </div>

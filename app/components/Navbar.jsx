@@ -5,13 +5,13 @@ import UserDropdown from './UserDropdown'
 
 export default function Navbar() {
   return (
-    <div className="flex bg-green-600 p-8">
+    <div className="navbar">
         <div className='flex gap-6'>
-            <Link href={"/"} className='bg-gray-500 p-4'>Home</Link>
-            <Link href={"/exercises"} className='bg-gray-500 p-4'>Exercises</Link>
+            <Link href={"/"} className='p-4 text-white text-lg font-semibold rounded-2xl'>Home</Link>
+            <Link href={"/exercises"} className='p-4 text-white text-lg font-semibold rounded-2xl'>Exercises</Link>
         </div>
         
-        <div className="ml-auto bg-blue-400 relative">
+        <div className="ml-auto relative">
           <UserDropdown />
         </div>
     </div>

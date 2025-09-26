@@ -16,49 +16,44 @@ async function filterSingularExercise(exercise_id) {
     (exercise) => exercise.exerciseId === exercise_id
   );
   
-  debugger;
   return selected_exercise;
 }
 
 // Database call to retrieve workout history for user
-async function getExerciseHistory(exercise_id) {
+// async function getExerciseHistory(exercise_id) {
     
-    const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
-    )
+//     const supabase = createClient(
+//         process.env.NEXT_PUBLIC_SUPABASE_URL,
+//         process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+//     )
 
-    const { data, error } = await supabase
-    .from("Exercises")
-    .select("*")
-    .eq("user", "me@gmail.com")
-    .eq("exercise_id", exercise_id)
+//     const { data, error } = await supabase
+//     .from("Exercises")
+//     .select("*")
+//     .eq("user", "me@gmail.com")
+//     .eq("exercise_id", exercise_id)
 
-    if (error){
-      console.error("Error with", error);
-      return [];
-    }
+//     if (error){
+//       console.error("Error with", error);
+//       return [];
+//     }
 
-    return data;
-}
+//     return data;
+// }
 
 export default async function page({ params }) {
   const { id } = await params
 
   const exercise_data = await filterSingularExercise(id)
 
-  const exercise_history = await getExerciseHistory(id)
+  // const exercise_history = await getExerciseHistory(id)
 
   return (
     <main>
-      <div>Exercise {id}</div>
+      <h1 className="section-title">{`${exercise_data.name.charAt(0).toUpperCase()}${exercise_data.name.slice(1)}`}</h1>
+      
       <div>
-      {/* {
-        Object.keys(exercise_data).map((key) => (
-          <div>{exercise_data[key]}</div>
-        ))
-      } */}
-      <ExerciseHistory exercise_data = {exercise_data} exercise_history = {exercise_history} />
+        <ExerciseHistory exercise_data = {exercise_data}/> {/* exercise_history = {exercise_history} */}
       </div>
     </main>
   )

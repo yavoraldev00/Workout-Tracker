@@ -1,30 +1,60 @@
+"use client"
+
 import { createClient } from "@supabase/supabase-js"
 import Link from "next/link";
 import CreateNewWorkout from "../components/CreateNewWorkout";
+import { useUser } from "./UserProvider";
+import { useEffect, useState } from "react";
 
 // Database call to retrieve ALL workouts
-async function getWorkouts() {
+// async function getWorkouts() {
     
-    const supabase = createClient(
+//     const supabase = createClient(
+//         process.env.NEXT_PUBLIC_SUPABASE_URL,
+//         process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+//     )
+
+//     const { data, error } = await supabase
+//     .from("Workouts")
+//     .select("*")
+//     .eq("user", "me@gmail.com")
+
+//     if (error){
+//       console.error("Error with", error);
+//       return [];
+//     }
+
+//     return data;
+// }
+
+export default function Workouts() {
+  const { userEmail } = useUser(); // 👈 Access email from context
+  const [workouts, setWorkouts] = useState([]);
+
+  useEffect(() => {
+    async function fetchWorkouts() {
+      const supabase = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL,
         process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
-    )
+      );
 
-    const { data, error } = await supabase
-    .from("Workouts")
-    .select("*")
-    .eq("user", "me@gmail.com")
+      const { data, error } = await supabase
+        .from("Workouts")
+        .select("*")
+        .eq("user", userEmail); // 👈 Use dynamic email
 
-    if (error){
-      console.error("Error with", error);
-      return [];
+      if (error) {
+        console.error("Error fetching workouts:", error);
+        return;
+      }
+
+      setWorkouts(data); // 👈 Update state
     }
 
-    return data;
-}
-
-export default async function Workouts() {
-  const workouts = await getWorkouts()
+    if (userEmail) {
+      fetchWorkouts();
+    }
+  }, [userEmail]); // 👈 Re-run when email changes
 
   return (
     <>

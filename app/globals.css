@@ -32,12 +32,36 @@ main {
   @apply mx-8 my-4
 }
 
+.navbar {
+  @apply flex p-8;
+  
+  background: linear-gradient(-45deg, #00c951, #28a745, #6bbf59);
+  background-size: 200% 200%;
+  animation: gradient 20s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .section-title {
-  @apply text-3xl border-b-2 border-gray-400
+  @apply text-3xl font-semibold border-b-2 border-gray-400 mb-4
 }
 
 .sub-title {
-  @apply text-xl border-b-2 border-gray-400
+  @apply text-xl font-semibold border-b-2 mb-4 border-gray-400
+}
+
+.pill-shape {
+  @apply p-2 border-2 rounded-2xl font-semibold text-white
 }
 
 .workout-card {
@@ -52,4 +76,12 @@ main {
 
 .exercise-load-grid > * > * {
   text-align: center;
+}
+
+.exercise-history-grid {
+  @apply grid grid-cols-4
+}
+
+.exercise-history-grid > * {
+  @apply self-center justify-self-center
 }
