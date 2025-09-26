@@ -218,6 +218,7 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
 
             <input
               required
+              name="workout-name"
               type="text"
               className="border-2 border-gray-400"
               onChange={(e) =>setWorkoutName(e.target.value)}
@@ -226,14 +227,18 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
           </label>
         )}
 
-        <h2 className="sub-title">Exercises</h2>
+        {!(formMode == "Workout") && (
+          <h2 className="sub-title">Exercises</h2>
+        )}
 
         {/* Shows the selected exercises, if there are any. If empty, urges user to select exercises */}
-        { Object.keys(selectedExercises).length === 0 ? (<p>Select some exercises</p>) : Object.keys(selectedExercises).map((exerciseId) => 
-        (
-          <ExerciseSpecifics key={exerciseId} exercise = {exerciseId} setSelectedExercises = {setSelectedExercises}/>
-        )
-        ) }
+        <div className="flex flex-col items-center gap-12">
+          { Object.keys(selectedExercises).length === 0 ? (<p>Select some exercises</p>) : Object.keys(selectedExercises).map((exerciseId) => 
+            (
+              <ExerciseSpecifics key={exerciseId} exercise = {exerciseId} setSelectedExercises = {setSelectedExercises}/>
+            )
+          ) }
+      </div>
 
         {/* Allows user to select exercises to add, only shown in "Edit" and "Create" mode */}
         {(formMode == "Edit" || formMode == "Create") && (

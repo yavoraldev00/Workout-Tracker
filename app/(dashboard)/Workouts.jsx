@@ -62,7 +62,8 @@ export default function Workouts() {
         workouts.map(workout => (
           <Link key={workout.id} href={`/workout/${workout.id}`}>
             <div className="workout-card">
-              <h3>{workout.workout.name}</h3>
+              <h3 className="text-3xl mb-2">{workout.workout.name}</h3>
+              <div>Number of exercises: {Object.keys(workout.workout.exercises).length}</div>
             </div>
           </Link>
         ))

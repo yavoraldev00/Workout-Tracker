@@ -33,10 +33,10 @@ export default function SearchExercise({ setShowAdd }) {
         !searchFilter.includes(ex.exerciseId)
     );
   return (
-    <div className="flex flex-col w-full bg-yellow-200">
+    <div className="flex flex-col w-full gap-1">
         {/* Search bar with input, clear text button and search */}
-        <div className="flex w-full bg-purple-400">
-            <input className="grow" type="text" placeholder="Search exercises (e.g Dumbbell).."
+        <div className="flex w-full bg-white rounded-sm border-2 border-gray-400">
+            <input className="grow p-2" type="text" placeholder="Search exercises (e.g Dumbbell).."
             value={searchQuery}
             onChange={(e) => {setSearchQuery(e.target.value)}}
             />
@@ -51,10 +51,10 @@ export default function SearchExercise({ setShowAdd }) {
         </div>
 
         {/* Search result drop down container */}
-        <div>
+        <div className="flex flex-col gap-1">
             {
                 visible.map(exercise => (
-                    <div key={exercise.exerciseId}>
+                    <div key={exercise.exerciseId} className="grow">
                         <div
                         onClick={() => {setShowAdd(true); addExerciseToWorkout(exercise)}}
                         className="cursor-pointer flex w-full border-2 border-gray-400"
@@ -63,10 +63,9 @@ export default function SearchExercise({ setShowAdd }) {
                         <Image
                             src={"/exercise_img/"+exercise.gifUrl}
                             alt="none"
-                            width={100}
-                            height={100}/>
+                            size={256}/>
 
-                        <h3>{exercise.name}</h3>
+                        <h3 className="font-semibold p-2">{`${exercise.name.charAt(0).toUpperCase()}${exercise.name.slice(1)}`}</h3>
                         
                         </div>
                     </div>

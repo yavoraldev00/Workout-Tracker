@@ -28,7 +28,7 @@ export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
   }, []);
 
     return (
-    <div className="flex relative" key={exercise}>
+    <div className="flex relative">
         {/* Button for removing an exercise from the selected exercises list */}
         
         {(formMode == "Edit" || formMode == "Create") && (
@@ -41,9 +41,9 @@ export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
                 return newExercises; // Return the new object
               })
             }} 
-            className="absolute top-0 right-0 p-4 cursor-pointer"
+            className="absolute top-0 right-0 border-2 border-white cursor-pointer"
           >
-            < IoClose size={24} color="white" className="bg-red-600"/>
+            < IoClose size={28} color="white" className="bg-red-600"/>
           </button>
         )}
 

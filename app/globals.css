@@ -32,6 +32,11 @@ main {
   @apply mx-8 my-4
 }
 
+.login-form-grid > * {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
 .navbar {
   @apply flex p-8;
   
@@ -57,7 +62,7 @@ main {
 }
 
 .sub-title {
-  @apply text-xl font-semibold border-b-2 mb-4 border-gray-400
+  @apply text-xl font-semibold w-3/4 border-b-2 mb-4 border-gray-400
 }
 
 .pill-shape {
@@ -65,7 +70,7 @@ main {
 }
 
 .workout-card {
-  @apply m-4 p-8 bg-gray-200 border-2 border-amber-600
+  @apply m-4 p-8 bg-gray-200 border-2 border-gray-300 rounded-md
 }
 
 .exercise-load-grid > *{
