@@ -73,10 +73,15 @@ main {
   @apply m-4 p-8 bg-gray-200 border-2 border-gray-300 rounded-md
 }
 
+.exercise-specific-card {
+  @apply flex relative bg-gray-300 border-2 border-gray-100 p-4 gap-4 rounded-2xl shadow-xl
+}
+
 .exercise-load-grid > *{
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  background-color: aquamarine;
+  grid-template-columns: 1fr 1fr 2fr 2fr;
+
+  @apply py-1;
 }
 
 .exercise-load-grid > * > * {
@@ -89,4 +94,20 @@ main {
 
 .exercise-history-grid > * {
   @apply self-center justify-self-center
+}
+
+/* Chrome, Safari, Edge, Opera */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+input[type=number] {
+  text-align: center;
 }

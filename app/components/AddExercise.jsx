@@ -8,7 +8,7 @@ export default function AddExercise() {
     // State determining if Add button shows or list is shown. Shows button by default
     const [showAdd, setShowAdd] = useState(true)
   return (
-    <div>
+    <div className="mt-8">
         {/* Add icon, search bar with search and close icons */}
         <div className="flex flex-col items-center w-4/5 mx-auto">
             {showAdd && (

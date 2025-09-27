@@ -16,11 +16,12 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exerc
         {
           Array.from({ length: numberOfSets }, (_, i) => i + 1)
           .map((set_number, index) => (
-              <div key={set_number}>
+              <div key={set_number} className={(index % 2 === 0) ? 'bg-white' : 'bg-gray-100'}>
                   {
-                      (index === numberOfSets - 1 && numberOfSets > 1) ? 
+                      ((index === numberOfSets - 1 && numberOfSets > 1) && !(formMode == "View") ) ? 
                       <button
                         onClick={(e) => {
+                          debugger;
                           e.preventDefault();
 
                           // If NOT in "View" mode, allows user to add or remove sets
@@ -39,6 +40,8 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exerc
                   
                   }
 
+                  <div>{index+1}</div>
+
                   <input
                     required
                     disabled = {formMode == "View"} // Disables inputs in "View" mode
@@ -46,7 +49,6 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exerc
                     onChange={(e) => {adjustExerciseData(exercise, index, e.target.name, e.target.value)}}
                     name="reps"
                     key={`set_${set_number}_reps`}
-                    className="bg-amber-200"
                     placeholder={
                       (importedLoad[index]) ? importedLoad[index][0] : ""
                     }
@@ -58,7 +60,6 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exerc
                     name="weight"
                     onChange={(e) => {adjustExerciseData(exercise, index, e.target.name, e.target.value)}}
                     key={`set_${set_number}_weight`}
-                    className="bg-amber-200"
                     placeholder={
                       (importedLoad[index]) ? importedLoad[index][1] : ""
                     }

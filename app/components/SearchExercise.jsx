@@ -32,6 +32,8 @@ export default function SearchExercise({ setShowAdd }) {
     const visible = results.filter(ex =>
         !searchFilter.includes(ex.exerciseId)
     );
+
+    debugger;
   return (
     <div className="flex flex-col w-full gap-1">
         {/* Search bar with input, clear text button and search */}
