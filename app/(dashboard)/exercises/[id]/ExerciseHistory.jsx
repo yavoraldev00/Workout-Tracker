@@ -155,17 +155,17 @@ export default function ExerciseHistory({ exercise_data }) {
   
   return (
     <div className="flex flex-col items-center">
-        <div className="flex gap-2 mb-2">
-          <button type="button" className={`cursor-pointer ${(!showHistory) ? "bg-amber-300" : "bg-gray-100 text-gray-400"} p-4`} onClick={() => setShowHistory(false)}>Details</button>
-          <button type="button" className={`cursor-pointer ${(showHistory) ? "bg-amber-300" : "bg-gray-100 text-gray-400"} p-4`} onClick={() => setShowHistory(true)}>History</button>
-        </div>
+      <div className="flex gap-2 mb-6">
+        <button type="button" className={`cursor-pointer ${(!showHistory) ? "bg-amber-300" : "bg-gray-100 text-gray-400"} p-4`} onClick={() => setShowHistory(false)}>Details</button>
+        <button type="button" className={`cursor-pointer ${(showHistory) ? "bg-amber-300" : "bg-gray-100 text-gray-400"} p-4`} onClick={() => setShowHistory(true)}>History</button>
+      </div>
 
       {/* Shows exercise details if on "Details" tab */}
       {!showHistory && (
-        <div className="grid grid-cols-2">
-          <Image src={`/exercise_img/${exercise_data.gifUrl}`} alt={exercise_data.exerciseId} width={256} height={256} className="mx-auto"/>
+        <div className="exercise-instructions-card">
+          <Image src={`/exercise_img/${exercise_data.gifUrl}`} alt={exercise_data.exerciseId} width={256} height={256} className="mx-6"/>
           <div>
-            <h3 className="font-semibold text-lg mb-2">Instructions</h3>
+            <h3 className="font-semibold text-3xl mb-2">Instructions</h3>
 
             {exercise_data.instructions.map((instruction_step, index) => (
               <p key={index}>
@@ -205,7 +205,7 @@ export default function ExerciseHistory({ exercise_data }) {
 
 
           {/* Table with exercise history */}
-          <div className="bg-blue-400 rounded-2xl">
+          <div className="bg-blue-400 rounded-2xl mb-12">
             <div className="exercise-history-grid bg-gray-200 border-b py-6 text-xl font-bold border-white">
               <div>Date</div>
               

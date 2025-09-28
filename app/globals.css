@@ -132,3 +132,24 @@ input[type=number] {
 input[type=number] {
   text-align: center;
 }
+
+.add-icon {
+  @apply text-green-500 scale-125 cursor-pointer;
+}
+
+.add-icon > path {
+  @apply stroke-60;
+}
+
+.remove-icon {
+  @apply text-red-500 scale-125 cursor-pointer;
+}
+
+.remove-icon > path {
+  @apply stroke-60;
+}
+
+.exercise-instructions-card {
+  @apply grid grid-cols-2 bg-gray-100 p-8 rounded-4xl shadow-2xl;
+  grid-template-columns: auto 1fr;
+}

@@ -33,7 +33,7 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exerc
                         }}
                         className="mx-auto"
                       >
-                        <IoRemove />
+                        <IoRemove className="remove-icon" />
                       </button>
                       :
                       <div></div>

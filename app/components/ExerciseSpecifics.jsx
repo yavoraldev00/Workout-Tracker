@@ -84,7 +84,7 @@ export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
                 {((sets < 5) && (formMode !== "View")) && (
                   <div>
                     <button onClick={(e)=>{e.preventDefault(); if(!(formMode == "View")){setSets(sets + 1)}}} className="mx-auto mt-2">
-                      <IoAdd />
+                      <IoAdd className="add-icon" />
                     </button>
                     <div></div>
                     <div></div>
