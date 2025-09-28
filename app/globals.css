@@ -37,6 +37,19 @@ main {
   grid-template-columns: 1fr 2fr;
 }
 
+.form-button {
+  @apply bg-gray-100 cursor-pointer px-2 py-4 font-semibold flex flex-col items-center;
+}
+
+.form-button > svg {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotateZ(0deg) }
+  100% { transform: rotateZ(360deg) }
+}
+
 .navbar {
   @apply flex p-8;
   

@@ -29,8 +29,10 @@ export default function SearchExercise({ setShowAdd }) {
     const searchFilter = Object.keys(selectedExercises)
 
     // When rendering, only show ones not in searchFilter
-    const visible = results.filter(ex =>
+    const visible = results.filter(ex =>{
+        debugger;
         !searchFilter.includes(ex.exerciseId)
+    }
     );
 
     debugger;
