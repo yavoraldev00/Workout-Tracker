@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react"
 import { IoClose, IoSearch } from "react-icons/io5"
 import { CreateWorkoutContext } from "../(dashboard)/workout/create/CreateWorkout";
 import Image from "next/image";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 // API call to get exercises
 export async function getExercises() {
@@ -15,49 +16,63 @@ export async function getExercises() {
 export default function SearchExercise({ setShowAdd }) {
     // Search bar funcionality
     const [searchQuery, setSearchQuery] = useState("")
-    const [showSearchResults, setShowSearchResults] = useState(false)
+    const [performedSearch, setPerformedSearch] = useState(false)
+    const [searchingExercises, SetSearchingExercises] = useState(false)
 
     // Search results functionality
     const { selectedExercises, addExerciseToWorkout } = useContext(CreateWorkoutContext);
 
+    // Holds results of performed search
     const [results, setResults] = useState([])
-    
-    useEffect(() => {
-        getExercises().then((res) => {setResults(res)})
-    },[])
 
-    const searchFilter = Object.keys(selectedExercises)
+    // Searches for exercises and sets the results
+    async function searchExercises(){
+        setPerformedSearch(true)
+        SetSearchingExercises(true)
 
-    // When rendering, only show ones not in searchFilter
-    const visible = results.filter(ex =>{
-        debugger;
-        !searchFilter.includes(ex.exerciseId)
+        const exercises = await getExercises()
+
+        const filteredExercises = exercises.filter((exr) => {
+            // returns exercises that include the search query and are NOT already in the selected exercises
+            debugger;
+           return (exr.name.includes(searchQuery) && !Object.keys(selectedExercises).includes(exr.exerciseId))
+
+        })
+
+        setResults(filteredExercises)
+        SetSearchingExercises(false)
     }
-    );
-
-    debugger;
   return (
-    <div className="flex flex-col w-full gap-1">
+    <div className="flex flex-col w-full gap-1 mb-12">
         {/* Search bar with input, clear text button and search */}
         <div className="flex w-full bg-white rounded-sm border-2 border-gray-400">
+            {/* Input for performing search query */}
             <input className="grow p-2" type="text" placeholder="Search exercises (e.g Dumbbell).."
             value={searchQuery}
             onChange={(e) => {setSearchQuery(e.target.value)}}
             />
+
+            {/* Button that clears the current search term */}
             <button className="flex items-center justify-center p-2 cursor-pointer" type="button"
             onClick={() => {setSearchQuery("")}}>
                 <IoClose size={25} color="gray"/>
             </button>
+
+            {/* Button that searches exercises when clicked. Shows a loading icon while performing searches */}
             <button className="flex items-center justify-center p-2 bg-blue-500 cursor-pointer" type="button"
-            onClick={() => {setShowSearchResults(true)}}>
-                <IoSearch size={30} />
+            onClick={() => {searchExercises()}}>
+                {(!searchingExercises) ? <IoSearch size={30} /> : <AiOutlineLoading3Quarters size={30} className="loading-icon"/>}
             </button>
         </div>
+
+        {(performedSearch && results.length == 0) && (
+            <div className="empty-search">No search results found</div>
+        )}
 
         {/* Search result drop down container */}
         <div className="flex flex-col gap-1">
             {
-                visible.map(exercise => (
+                results.map(exercise => (
                     <div key={exercise.exerciseId} className="grow">
                         <div
                         onClick={() => {setShowAdd(true); addExerciseToWorkout(exercise)}}
@@ -67,7 +82,9 @@ export default function SearchExercise({ setShowAdd }) {
                         <Image
                             src={"/exercise_img/"+exercise.gifUrl}
                             alt="none"
-                            size={256}/>
+                            height={256}
+                            width={256}
+                            />
 
                         <h3 className="font-semibold p-2">{`${exercise.name.charAt(0).toUpperCase()}${exercise.name.slice(1)}`}</h3>
                         

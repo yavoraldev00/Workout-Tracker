@@ -41,7 +41,7 @@ main {
   @apply bg-gray-100 cursor-pointer px-2 py-4 font-semibold flex flex-col items-center;
 }
 
-.form-button > svg {
+.loading-icon {
   animation: spin 2s linear infinite;
 }
 
@@ -68,6 +68,14 @@ main {
   100% {
     background-position: 0% 50%;
   }
+}
+
+.error-msg {
+  @apply text-center text-sm font-thin italic text-white bg-red-500 py-2 rounded-2xl border-2 border-white;
+}
+
+.empty-search {
+  @apply text-center text-sm font-thin italic text-gray-500 bg-white py-2 rounded-2xl py-3;
 }
 
 .section-title {

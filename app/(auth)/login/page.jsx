@@ -130,15 +130,15 @@ export default function page() {
         </div>
 
         { login && <button className="form-button" disabled={signingUser}>
-          {(!signingUser) ?  "Log-in" : <AiOutlineLoading3Quarters size={24}/>}
+          {(!signingUser) ?  "Log-in" : <AiOutlineLoading3Quarters size={24} className="loading-icon"/>}
         </button>}
         
         { !login && <button className="form-button">
-          {(!signingUser) ?  "Register" : <AiOutlineLoading3Quarters size={24}/>}
+          {(!signingUser) ?  "Register" : <AiOutlineLoading3Quarters size={24} className="loading-icon"/>}
         </button>}
 
         {errorMsg && (
-          <div className="text-center text-sm font-thin italic text-white bg-red-500 py-2 rounded-2xl border-2 border-white">{errorMsg}</div>
+          <div className="error-msg">{errorMsg}</div>
         )}
       </form>
     </div>
