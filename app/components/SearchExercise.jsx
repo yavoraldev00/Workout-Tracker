@@ -34,7 +34,6 @@ export default function SearchExercise({ setShowAdd }) {
 
         const filteredExercises = exercises.filter((exr) => {
             // returns exercises that include the search query and are NOT already in the selected exercises
-            debugger;
            return (exr.name.includes(searchQuery) && !Object.keys(selectedExercises).includes(exr.exerciseId))
 
         })
@@ -50,6 +49,13 @@ export default function SearchExercise({ setShowAdd }) {
             <input className="grow p-2" type="text" placeholder="Search exercises (e.g Dumbbell).."
             value={searchQuery}
             onChange={(e) => {setSearchQuery(e.target.value)}}
+            onKeyDown={(e) => {
+                if(e.key === "Enter"){
+                    e.preventDefault();
+
+                    searchExercises();
+                }
+            }}
             />
 
             {/* Button that clears the current search term */}
@@ -65,6 +71,7 @@ export default function SearchExercise({ setShowAdd }) {
             </button>
         </div>
 
+        {/* Displayed if no search results were found */}
         {(performedSearch && results.length == 0) && (
             <div className="empty-search">No search results found</div>
         )}

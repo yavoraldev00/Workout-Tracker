@@ -27,7 +27,11 @@ export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
         setImportedLoad(loadToImport);
 
         getExercises().then((res) => {setExerciseData(Array.from(res).filter((exr)=>{return exr.exerciseId == exercise}))})
+      }else{
+        getExercises().then((res) => {setExerciseData(Array.from(res).filter((exr)=>{return exr.exerciseId == exercise}))})
       }
+    }else{
+      getExercises().then((res) => {setExerciseData(Array.from(res).filter((exr)=>{return exr.exerciseId == exercise}))})
     }
     // Only runs it on the initial build
   }, []);
