@@ -45,9 +45,20 @@ export default async function DashboardLayout({ children }) {
   // 4. Access user metadata
   const userName = user.user_metadata?.display_name ?? "NoName";
   const userEmail = user.user_metadata?.email ?? "NoEmail";
+
+  // After getting userEmail
+  const { data: workouts, error: workoutsError } = await supabase
+    .from("Workouts")
+    .select("*")
+    .eq("user", userEmail);
+
+  if (workoutsError) {
+    console.error("Error fetching workouts:", workoutsError);
+  }
+    
   return (
     <>
-    <UserProvider userName={userName} userEmail={userEmail}>
+    <UserProvider userName={userName} userEmail={userEmail} workouts={workouts ?? []}>
         <Navbar />
         <main>
             {children}
