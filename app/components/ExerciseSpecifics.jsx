@@ -5,7 +5,6 @@ import { useContext, useEffect, useState } from "react";
 import { CreateWorkoutContext } from "../(dashboard)/workout/create/CreateWorkout";
 import ExerciseInputData from "./ExerciseInputData";
 import { IoAdd, IoClose } from "react-icons/io5";
-import { getExercises } from "./SearchExercise";
 
 export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
   // Number of sets for an exercise. Minimum 1, maximum 5
@@ -18,6 +17,13 @@ export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
 
   // If there are imported exercises, sets the number of sets to match it
   useEffect(() => {
+    async function getExercises(){
+      const res = await fetch(`${location.origin}/api/exercises`)
+      const exercises = await res.json()
+
+      return exercises
+    }
+
     if(Object.keys(importedExercises).length > 0){
       // Checks if there is data for an imported exercise and adds it as a placeholder
       if(importedExercises[exercise]){

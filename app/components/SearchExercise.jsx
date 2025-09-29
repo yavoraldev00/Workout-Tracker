@@ -37,7 +37,7 @@ export default function SearchExercise({ setShowAdd }) {
 
         const filteredExercises = exercises.filter((exr) => {
             // returns exercises that include the search query and are NOT already in the selected exercises
-           return (exr.name.includes(searchQuery) && !Object.keys(selectedExercises).includes(exr.exerciseId))
+           return (exr.name.includes(searchQuery.toLowerCase()) && !Object.keys(selectedExercises).includes(exr.exerciseId))
 
         })
 
