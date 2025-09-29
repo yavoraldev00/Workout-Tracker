@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const res = await fetch("http://localhost:4000/exercises")
+  const res = await fetch("https://api.jsonsilo.com/public/822f6e17-a05f-4945-bac0-9a57fafdd254")
 
-  return res.json();
+  const data = await res.json();
+
+  // return data.exercises;
+
+  return NextResponse.json(data.exercises)
 }

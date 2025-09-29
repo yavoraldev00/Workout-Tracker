@@ -7,11 +7,12 @@ import Image from "next/image";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 // API call to get exercises
-export async function getExercises() {
-  const res = await fetch("http://localhost:4000/exercises")
+// export async function getExercises() {
+// //   const res = await fetch("http://localhost:4000/exercises")
+//   const res = await fetch("https://api.jsonsilo.com/public/822f6e17-a05f-4945-bac0-9a57fafdd254")
 
-  return res.json();
-}
+//   return res.json();
+// }
 
 export default function SearchExercise({ setShowAdd }) {
     // Search bar funcionality
@@ -30,7 +31,9 @@ export default function SearchExercise({ setShowAdd }) {
         setPerformedSearch(true)
         SetSearchingExercises(true)
 
-        const exercises = await getExercises()
+        const res = await fetch(`${location.origin}/api/exercises`)
+        const exercises = await res.json()
+        // const exercises = await getExercises()
 
         const filteredExercises = exercises.filter((exr) => {
             // returns exercises that include the search query and are NOT already in the selected exercises

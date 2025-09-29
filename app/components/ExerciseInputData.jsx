@@ -21,7 +21,6 @@ export default function ExerciseInputData({ numberOfSets, setNumberOfSets, exerc
                       ((index === numberOfSets - 1 && numberOfSets > 1) && !(formMode == "View") ) ? 
                       <button
                         onClick={(e) => {
-                          debugger;
                           e.preventDefault();
 
                           // If NOT in "View" mode, allows user to add or remove sets

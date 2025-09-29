@@ -8,11 +8,13 @@ import { useUser } from "../UserProvider";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 // API call to get exercises
-export async function getExercises() {
-  const res = await fetch("http://localhost:4000/exercises")
+// export async function getExercises() {
+//   const res = await fetch("https://api.jsonsilo.com/public/822f6e17-a05f-4945-bac0-9a57fafdd254")
 
-  return res.json();
-}
+//   const data = await res.json();
+
+//   return data.exercises;
+// }
 
 export default function ExerciseList() {
     const [includedExercises, setIncludedExercises] = useState([])
@@ -33,7 +35,8 @@ export default function ExerciseList() {
         setIncludedExercises(Array.from(uniqueExercises))
 
         async function getIncludedExerciseData(){
-            const exercises = await getExercises()
+            const res = await fetch(`${location.origin}/api/exercises`)
+            const exercises = await res.json()
 
             const filteredExercisesData = exercises.filter((exr) => {
                 // returns exercises that include the search query and are NOT already in the selected exercises
@@ -63,7 +66,9 @@ export default function ExerciseList() {
         setPerformedSearch(true)
         SetSearchingExercises(true)
 
-        const exercises = await getExercises()
+        const res = await fetch(`${location.origin}/api/exercises`)
+        const exercises = await res.json()
+        // const exercises = await getExercises()
 
         const filteredExercises = exercises.filter((exr) => {
             // returns exercises that include the search query and are NOT already in the selected exercises
