@@ -209,7 +209,7 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
 
   return (
     <CreateWorkoutContext.Provider value={{ selectedExercises, addExerciseToWorkout, adjustExerciseData, importedExercises, formMode }}>
-      <form onSubmit={submitForm} className="m-2 relative">
+      <form onSubmit={submitForm} className="md:m-2 relative">
 
         {/* Shows Workout name if in "Edit" or "Crete" mode */}
         {(formMode == "Edit" || formMode == "Create") && (

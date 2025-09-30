@@ -55,7 +55,7 @@ main {
 }
 
 .navbar {
-  @apply flex p-8;
+  @apply flex p-4 md:p-8;
   
   background: linear-gradient(-45deg, #00c951, #28a745, #6bbf59);
   background-size: 200% 200%;
@@ -99,14 +99,25 @@ main {
 }
 
 .exercise-specific-card {
-  @apply flex relative bg-gray-300 border-2 border-gray-100 p-4 gap-4 rounded-2xl shadow-xl
+  @apply flex relative bg-gray-300 border-2 border-gray-100 p-4 gap-4 rounded-2xl shadow-xl max-w-full
+
+  flex-col items-center
+
+  md:flex-row md:items-start
+}
+
+.exercise-specific-card >* img {
+  @apply mx-auto
+}
+
+.exercise-specific-card >* h3 {
+  @apply text-center
+
+  md:text-start 
 }
 
 .exercise-load-grid > *{
-  display: grid;
-  grid-template-columns: 1fr 1fr 2fr 2fr;
-
-  @apply py-1;
+  @apply grid grid-cols-4 md:grid-cols-[1fr_1fr_2fr_2fr];
 }
 
 .exercise-load-grid > * > * {
