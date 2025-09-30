@@ -68,7 +68,7 @@ export default function SearchExercise({ setShowAdd }) {
             </button>
 
             {/* Button that searches exercises when clicked. Shows a loading icon while performing searches */}
-            <button className="flex items-center justify-center p-2 bg-blue-500 cursor-pointer" type="button"
+            <button className="flex items-center justify-center md:p-2 bg-blue-500 cursor-pointer" type="button"
             onClick={() => {searchExercises()}}>
                 {(!searchingExercises) ? <IoSearch size={30} /> : <AiOutlineLoading3Quarters size={30} className="loading-icon"/>}
             </button>

@@ -248,7 +248,7 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
         {/* Container for form buttons. Edit, Finish eiditng, Finish workout, Create */}
         <div className="flex gap-2 absolute right-0 top-0">
           {selectExercisesError && (
-            <div className="absolute top-0 right-0 -translate-y-[150%] text-nowrap z-9 bg-amber-500">Please add at least 1 exercise</div>
+            <div className="absolute top-0 right-0 -translate-y-[150%] text-nowrap z-9 error-msg">Please add at least 1 exercise</div>
           )}
 
           {/* Only shows buttons when in "View" mode */}

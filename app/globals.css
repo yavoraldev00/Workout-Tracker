@@ -75,11 +75,11 @@ main {
 }
 
 .error-msg {
-  @apply text-center text-sm font-thin italic text-white bg-red-500 py-2 rounded-2xl border-2 border-white;
+  @apply text-center text-sm font-thin italic text-white bg-red-500 p-2 rounded-2xl border-2 border-white;
 }
 
 .empty-search {
-  @apply text-center text-sm font-thin italic text-gray-500 bg-white py-2 rounded-2xl py-3;
+  @apply text-center text-sm font-thin italic text-gray-500 bg-white py-2 rounded-2xl;
 }
 
 .section-title {
