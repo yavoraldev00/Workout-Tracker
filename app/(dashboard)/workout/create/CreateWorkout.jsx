@@ -211,42 +211,8 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
     <CreateWorkoutContext.Provider value={{ selectedExercises, addExerciseToWorkout, adjustExerciseData, importedExercises, formMode }}>
       <form onSubmit={submitForm} className="md:m-2 relative">
 
-        {/* Shows Workout name if in "Edit" or "Crete" mode */}
-        {(formMode == "Edit" || formMode == "Create") && (
-          <label>
-            <span className="mr-4">Workout name:</span>
-
-            <input
-              required
-              name="workout-name"
-              type="text"
-              className="border-2 border-gray-400"
-              onChange={(e) =>setWorkoutName(e.target.value)}
-              value={workoutName}
-            />
-          </label>
-        )}
-
-        {!(formMode == "Workout") && (
-          <h2 className="sub-title">Exercises</h2>
-        )}
-
-        {/* Shows the selected exercises, if there are any. If empty, urges user to select exercises */}
-        <div className="flex flex-col items-center gap-12">
-          { Object.keys(selectedExercises).length === 0 ? (<p>Select some exercises</p>) : Object.keys(selectedExercises).map((exerciseId) => 
-            (
-              <ExerciseSpecifics key={exerciseId} exercise = {exerciseId} setSelectedExercises = {setSelectedExercises}/>
-            )
-          ) }
-      </div>
-
-        {/* Allows user to select exercises to add, only shown in "Edit" and "Create" mode */}
-        {(formMode == "Edit" || formMode == "Create") && (
-          <AddExercise />
-        )}
-
         {/* Container for form buttons. Edit, Finish eiditng, Finish workout, Create */}
-        <div className="flex gap-2 absolute right-0 top-0">
+        <div className="flex justify-end gap-2 right-0 top-0">
           {selectExercisesError && (
             <div className="absolute top-0 right-0 -translate-y-[150%] text-nowrap z-9 error-msg">Please add at least 1 exercise</div>
           )}
@@ -280,6 +246,40 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
             </>
           )}
         </div>
+
+        {/* Shows Workout name if in "Edit" or "Crete" mode */}
+        {(formMode == "Edit" || formMode == "Create") && (
+          <label>
+            <span className="mr-4">Workout name:</span>
+
+            <input
+              required
+              name="workout-name"
+              type="text"
+              className="border-2 border-gray-400"
+              onChange={(e) =>setWorkoutName(e.target.value)}
+              value={workoutName}
+            />
+          </label>
+        )}
+
+        {!(formMode == "Workout") && (
+          <h2 className="sub-title">Exercises</h2>
+        )}
+
+        {/* Shows the selected exercises, if there are any. If empty, urges user to select exercises */}
+        <div className="flex flex-col items-center gap-12">
+          { Object.keys(selectedExercises).length === 0 ? (<p>Select some exercises</p>) : Object.keys(selectedExercises).map((exerciseId) => 
+            (
+              <ExerciseSpecifics key={exerciseId} exercise = {exerciseId} setSelectedExercises = {setSelectedExercises}/>
+            )
+          ) }
+      </div>
+
+        {/* Allows user to select exercises to add, only shown in "Edit" and "Create" mode */}
+        {(formMode == "Edit" || formMode == "Create") && (
+          <AddExercise />
+        )}
       </form>
     </CreateWorkoutContext.Provider>
   )
