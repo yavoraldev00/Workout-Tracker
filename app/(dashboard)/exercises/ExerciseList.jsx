@@ -87,25 +87,19 @@ export default function ExerciseList() {
             <div>
                 <div className="text-center text-2xl font-semibold">Included exercises</div>
 
-                <div className="flex flex-col gap-1">
+                <div className="exercise-page-card-container">
                     {includedExercisesData.map(exercise => (
                         <Link key={exercise.exerciseId} href={`/exercises/${exercise.exerciseId}`}>
-                            <div className="grow">
-                                <div
-                                className="cursor-pointer flex w-full border-2 border-gray-400"
-                                >
-                            
-                                <Image
-                                    src={"/exercise_img/"+exercise.gifUrl}
-                                    alt="none"
-                                    height={256}
-                                    width={256}
+                                <div className="exercise-page-card">    
+                                    <Image
+                                        src={"/exercise_img/"+exercise.gifUrl}
+                                        alt="none"
+                                        height={256}
+                                        width={256}
                                     />
 
-                                <h3 className="font-semibold p-2">{`${exercise.name.charAt(0).toUpperCase()}${exercise.name.slice(1)}`}</h3>
-                                
+                                    <h3>{`${exercise.name.charAt(0).toUpperCase()}${exercise.name.slice(1)}`}</h3>
                                 </div>
-                            </div>
                         </Link>
                     ))}
                 </div>
@@ -139,25 +133,19 @@ export default function ExerciseList() {
         )}
 
         {/* Search result drop down container */}
-        <div className="flex flex-col gap-1">
+        <div className="exercise-page-card-container">
             {
                 results.map(exercise => (
                     <Link key={exercise.exerciseId} href={`/exercises/${exercise.exerciseId}`}>
-                        <div className="grow">
-                            <div
-                            className="cursor-pointer flex w-full border-2 border-gray-400"
-                            >
-                        
+                        <div className="exercise-page-card">
                             <Image
                                 src={"/exercise_img/"+exercise.gifUrl}
                                 alt="none"
                                 height={256}
                                 width={256}
-                                />
+                            />
 
                             <h3 className="font-semibold p-2">{`${exercise.name.charAt(0).toUpperCase()}${exercise.name.slice(1)}`}</h3>
-                            
-                            </div>
                         </div>
                     </Link>
                 ))

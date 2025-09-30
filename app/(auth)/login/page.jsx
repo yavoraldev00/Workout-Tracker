@@ -92,7 +92,7 @@ export default function page() {
   }
   
   return (
-    <div className="p-8 rounded-md bg-gray-200 text-black">
+    <div className="login-form">
       <div className="w-full flex justify-center gap-1">
         <button className={`cursor-pointer ${(login) ? "bg-amber-300" : "bg-gray-100 text-gray-400"} p-2`}
           onClick={() => {

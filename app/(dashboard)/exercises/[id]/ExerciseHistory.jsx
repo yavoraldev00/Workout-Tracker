@@ -163,7 +163,7 @@ export default function ExerciseHistory({ exercise_data }) {
       {/* Shows exercise details if on "Details" tab */}
       {!showHistory && (
         <div className="exercise-instructions-card">
-          <Image src={`/exercise_img/${exercise_data.gifUrl}`} alt={exercise_data.exerciseId} width={256} height={256} className="mx-6"/>
+          <Image src={`/exercise_img/${exercise_data.gifUrl}`} alt={exercise_data.exerciseId} width={256} height={256}/>
           <div>
             <h3 className="font-semibold text-3xl mb-2">Instructions</h3>
 
