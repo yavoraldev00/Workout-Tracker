@@ -151,6 +151,31 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
     }, 1);
   }
 
+  // Sets the value of each exercise to 0, for tracking the current load and record
+  function resetLoad() {
+  setSelectedExercises(prevExercises => {
+    const updatedExercises = {};
+
+    for (const exerciseId in prevExercises) {
+      const loadArray = prevExercises[exerciseId].load;
+
+      if (Array.isArray(loadArray)) {
+        const newLoad = loadArray.map(() => [0, 0]);
+
+        updatedExercises[exerciseId] = {
+          ...prevExercises[exerciseId],
+          load: newLoad,
+          volume: 0
+        };
+      } else {
+        updatedExercises[exerciseId] = { ...prevExercises[exerciseId] };
+      }
+    }
+
+    return updatedExercises;
+  });
+  }
+
   // Sends data to the database and redirects the user to the dashboard
   async function submitForm(e) {
     // Prevents form button from refreshing page
@@ -221,7 +246,7 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
           {(formMode == "View") && (
             <>
               <button className="pill-shape bg-blue-400 cursor-pointer" type="button" onClick={()=>{setFormMode("Edit")}}>Edit Mode</button>
-              <button className="pill-shape bg-green-400 cursor-pointer" type="button" onClick={()=>{setFormMode("Workout")}}>Start Workout</button>
+              <button className="pill-shape bg-green-400 cursor-pointer" type="button" onClick={()=>{setFormMode("Workout"); resetLoad()}}>Start Workout</button>
             </>
           )}
 

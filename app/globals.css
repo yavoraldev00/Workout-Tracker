@@ -124,6 +124,39 @@ main {
   text-align: center;
 }
 
+.exercise-data-summary {
+  @apply bg-white my-8 relative w-3/4 mx-auto rounded-md;
+  
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+.exercise-data-summary > * {
+  @apply flex flex-col items-center;
+}
+/* 
+.exercise-data-summary > * > input {
+  @apply text-center border border-blue-500;
+  width: auto;
+  max-width: 6ch;
+} */
+
+.exercise-data-summary::before {
+  content: "Highest records";
+  position: absolute;
+  top: -1.2em;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0 0.5em;
+  z-index: 1;
+
+  @apply text-sm font-semibold italic text-nowrap text-gray-600
+}
+
+.best-records::before {
+  content: "Previous best records";
+}
+
 .exercise-history-grid {
   @apply grid grid-cols-4
 }

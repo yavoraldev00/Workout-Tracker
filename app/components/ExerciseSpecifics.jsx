@@ -11,7 +11,7 @@ export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
   const [sets, setSets] = useState(1)
 
   const { selectedExercises, importedExercises, formMode } = useContext(CreateWorkoutContext);
-  const [importedLoad, setImportedLoad] = useState({});
+  const [importedLoad, setImportedLoad] = useState([])
 
   const [exerciseData, setExerciseData] = useState([])
 
@@ -68,35 +68,72 @@ export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
         <div>
             <h3 className="text-xl font-semibold mb-4">{(exerciseData[0]) ? `${exerciseData[0].name.charAt(0).toUpperCase()}${exerciseData[0].name.slice(1)}` : ""}</h3>
 
-            <div className="exercise-load-grid">
-                {/* Number of reps and weight */}
-                <div className="bg-gray-100 font-bold">
-                  <span></span>
-                  <span>Set</span>
-                  <span>Reps</span>
-                  <span>Weight</span>
-                </div>
-                
-                {/* Component that creates input cells based on the number of sets */}
-                <ExerciseInputData
-                  numberOfSets={sets}
-                  setNumberOfSets={setSets}
-                  exercise={exercise}
-                  importedLoad={importedLoad}
-                />
+            {/* Contaier holding exercise data and volume / previous records */}
+            <div>
+              <div className="exercise-load-grid">
+                  {/* Number of reps and weight */}
+                  <div className="bg-gray-100 font-bold">
+                    <span></span>
+                    <span>Set</span>
+                    <span>Reps</span>
+                    <span>Weight</span>
+                  </div>
+                  
+                  {/* Component that creates input cells based on the number of sets */}
+                  <ExerciseInputData
+                    numberOfSets={sets}
+                    setNumberOfSets={setSets}
+                    exercise={exercise}
+                    importedLoad={importedLoad}
+                  />
 
-                {/* Add button to add another set. Doesn't show if there's 5 sets (maximum) */}
-                {/* Cannot new sets in "View" mode */}
-                {((sets < 5) && (formMode !== "View")) && (
-                  <div>
-                    <button onClick={(e)=>{e.preventDefault(); if(!(formMode == "View")){setSets(sets + 1)}}} className="mx-auto mt-2">
-                      <IoAdd className="add-icon" />
-                    </button>
-                    <div></div>
-                    <div></div>
-                    <div></div>
+                  {/* Add button to add another set. Doesn't show if there's 5 sets (maximum) */}
+                  {/* Cannot new sets in "View" mode */}
+                  {((sets < 5) && (formMode !== "View")) && (
+                    <div>
+                      <button onClick={(e)=>{e.preventDefault(); if(!(formMode == "View")){setSets(sets + 1)}}} className="mx-auto mt-2">
+                        <IoAdd className="add-icon" />
+                      </button>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                    </div>
+                  )}
+              </div>
+
+              {/* Volume / previous records */}
+              <div>
+                {/* Load and max weight of current workout */}
+                <div></div>
+                {formMode == "Workout" && (
+                  <div className="exercise-data-summary">
+                    <div>
+                      <label className="bg-gray-200 w-full text-center border rounded-tl-md border-gray-400">Volume</label>
+                      <label className="text-gray-500 text-sm font-semibold my-auto py-1">{selectedExercises[exercise]["volume"]}</label>
+                    </div>
+
+                    <div>
+                      <label className="bg-gray-200 w-full text-center border rounded-tr-md border-gray-400">Max weight</label>
+                      <label className="text-gray-500 text-sm font-semibold my-auto py-1">{Math.max(...selectedExercises[exercise]["load"].map(pair => pair[1]))}</label>
+                    </div>
                   </div>
                 )}
+
+                {/* Best from previous workout */}
+                {importedLoad && (
+                  <div className="exercise-data-summary best-records">
+                    <div>
+                      <label className="bg-gray-200 w-full text-center border rounded-tl-md border-gray-400">Volume</label>
+                      <label className="text-gray-500 text-sm font-semibold my-auto py-1">{importedLoad.reduce((sum, pair) => sum + pair[0] * pair[1], 0)}</label>
+                    </div>
+
+                    <div>
+                      <label className="bg-gray-200 w-full text-center border rounded-tr-md border-gray-400">Max weight</label>
+                      <label className="text-gray-500 text-sm font-semibold my-auto py-1">{Math.max(...importedLoad.map(pair => pair[1]))}</label>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
         </div>
     </div>
