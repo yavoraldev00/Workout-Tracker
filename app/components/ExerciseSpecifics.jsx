@@ -120,7 +120,7 @@ export default function ExerciseSpecifics({ exercise, setSelectedExercises }) {
                 )}
 
                 {/* Best from previous workout */}
-                {importedLoad && (
+                {(importedLoad && formMode != "Create") && (
                   <div className="exercise-data-summary best-records">
                     <div>
                       <label className="bg-gray-200 w-full text-center border rounded-tl-md border-gray-400">Volume</label>
