@@ -86,7 +86,7 @@ export default function SearchExercise({ setShowAdd }) {
                     <div key={exercise.exerciseId} className="grow">
                         <div
                         onClick={() => {setShowAdd(true); addExerciseToWorkout(exercise)}}
-                        className="cursor-pointer flex w-full border-2 border-gray-400"
+                        className="cursor-pointer flex flex-col md:flex-row items-center md:items-start w-full border-2 border-gray-400"
                         >
                     
                         <Image
@@ -96,7 +96,7 @@ export default function SearchExercise({ setShowAdd }) {
                             width={256}
                             />
 
-                        <h3 className="font-semibold p-2">{`${exercise.name.charAt(0).toUpperCase()}${exercise.name.slice(1)}`}</h3>
+                        <h3 className="font-semibold p-2 text-center">{`${exercise.name.charAt(0).toUpperCase()}${exercise.name.slice(1)}`}</h3>
                         
                         </div>
                     </div>
