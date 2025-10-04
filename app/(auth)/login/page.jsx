@@ -72,7 +72,7 @@ export default function page() {
         email: email,
         password: password,
         options: {
-          emailRedirectTo: `${location.origin}/api/auth/callback`,
+          emailRedirectTo: `${location.origin}`,
           data: { 
             display_name: username
           }
