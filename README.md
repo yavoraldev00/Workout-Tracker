@@ -2,6 +2,8 @@
 
 [Link](https://workout-tracker-murex-kappa.vercel.app)
 
+!["Alt text"](https://github.com/user-attachments/assets/8c4dfd6f-362f-4f37-aaf1-1487fb7080fa)
+
 ## Summary
 
 This is a fitness tracker web app. With it, users can create an account, make their own workouts and track their exercise progress. I built this app using NextJS and Supabase, so I can practice and learn how to make more complicated React apps.
