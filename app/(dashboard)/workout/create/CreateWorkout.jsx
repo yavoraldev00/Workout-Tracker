@@ -7,6 +7,7 @@ import ExerciseSpecifics from "@/app/components/ExerciseSpecifics";
 import { usePathname, useRouter } from "next/navigation.js";
 import AddExercise from "@/app/components/AddExercise.jsx";
 import { useUser } from "../../UserProvider.jsx";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 // Context for passing variables and functions from createContext to ExerciseInputData
 export const CreateWorkoutContext = createContext();
@@ -28,6 +29,9 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
   // [ "Create", "View", "Edit", "Workout" ]
   // Starts off in "Create" mode by default. Changes to "View" if component called from workout/[id]
   const [formMode, setFormMode] = useState("Create")
+
+  // Variable used for showing loading icon and disabling submition buttons
+  const [performingSend, setPerformingSend] = useState(false)
 
   // Variable for showing the error message if a workout has no exercises
   const [selectExercisesError, setSelectExercisesError] = useState(false)
@@ -181,11 +185,15 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
     // Prevents form button from refreshing page
     e.preventDefault();
 
+    
     // If there are no selected exercises, shows an error
     if(Object.keys(selectedExercises).length === 0){
       setSelectExercisesError(true);
       return
     }
+    
+    // Sets variable to true, disabled submit buttons and shows loading icon
+    setPerformingSend(true)
 
     // Variable storing data to send to database to update workout
     const dataToSend = {
@@ -218,6 +226,7 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
     // If the response is an error, alerts the error. If there is no error, changes the form mode to "View" and redirects the user if needed
     if(res){
       alert(res.message)
+      setPerformingSend(false)
     }else{
       // Sets the mode to "View"
       setFormMode("View")
@@ -226,6 +235,8 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
       if(formMode == "Create" || formMode == "Workout"){
         router.push("/")
       }
+
+      setPerformingSend(false)
   
       // Refreshes fetch request to update database
       router.refresh()
@@ -253,21 +264,21 @@ export default function CreateWorkout({ selectedWorkoutTemplate }) {
           {/* Only shows buttons in "Edit" mode */}
           {formMode == "Edit" && (
             <>
-              <button className="pill-shape bg-red-500 cursor-pointer" type="button" onClick={()=>{cancelEditOrWorkoutMode()}}>Cancel Edits</button>
-              <button className="pill-shape bg-blue-400 cursor-pointer">Submit Edit</button>
+              <button className="pill-shape bg-red-500 cursor-pointer" disabled={performingSend} type="button" onClick={()=>{cancelEditOrWorkoutMode()}}>Cancel Edits</button>
+              <button className="pill-shape bg-blue-400 cursor-pointer" disabled={performingSend}>{(!performingSend) ?  "Submit Edit" : <AiOutlineLoading3Quarters size={24} className="loading-icon"/>}</button>
             </>
           )}
 
           {/* Only shows button in "Create" mode */}
           {formMode == "Create" && (
-            <button className="pill-shape bg-green-400 cursor-pointer">Create</button>
+            <button className="pill-shape bg-green-400 cursor-pointer" disabled={performingSend}>{(!performingSend) ?  "Create" : <AiOutlineLoading3Quarters size={24} className="loading-icon"/>}</button>
           )}
 
           {/* Only shows buttons in "Workout" mode */}
           {formMode == "Workout" && (
             <>
-              <button className="pill-shape bg-red-500 cursor-pointer" onClick={()=>{cancelEditOrWorkoutMode()}}>Cancel workout</button>
-              <button className="pill-shape bg-green-400 cursor-pointer">Submit workout</button>
+              <button className="pill-shape bg-red-500 cursor-pointer" disabled={performingSend} onClick={()=>{cancelEditOrWorkoutMode()}}>Cancel workout</button>
+              <button className="pill-shape bg-green-400 cursor-pointer" disabled={performingSend}>{(!performingSend) ?  "Submit workout" : <AiOutlineLoading3Quarters size={24} className="loading-icon"/>}</button>
             </>
           )}
         </div>
