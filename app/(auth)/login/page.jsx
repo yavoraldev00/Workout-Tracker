@@ -72,7 +72,7 @@ export default function page() {
         email: email,
         password: password,
         options: {
-          emailRedirectTo: `${location.origin}`,
+          emailRedirectTo: `workout-tracker-murex-kappa.vercel.app`,
           data: { 
             display_name: username
           }
